@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useRef, useState } from "react"
 import { HeroGlobe } from "@/components/rio/hero-globe"
+import { UnderConstructionTopBar, UnderConstructionHeroBanner } from "@/components/rio/under-construction-banner"
 
 /* ---------------- palette ---------------- */
 const NAVY = "#0A2E52"
@@ -229,6 +230,8 @@ export default function Home() {
 
   return (
     <div style={{ position: "relative", overflowX: "hidden", fontFamily: "var(--font-manrope), system-ui, sans-serif", color: INK, background: "#fff" }}>
+      <UnderConstructionTopBar />
+
       {/* ============ NAV ============ */}
       <nav
         style={{
@@ -261,6 +264,7 @@ export default function Home() {
         <div className="hero-grid" style={{ position: "relative", maxWidth: 1280, margin: "0 auto" }}>
           {/* LEFT */}
           <div>
+            <UnderConstructionHeroBanner />
             <div className="reveal" style={{ display: "inline-flex", alignItems: "center", gap: 14, marginBottom: 22 }}>
               <span style={{ fontFamily: SORA, fontSize: 14, fontWeight: 700, letterSpacing: ".22em", color: RED }}>YOUR TRUSTED PARTNER IN</span>
               <span style={{ width: 70, height: 2, background: "linear-gradient(90deg,#E01E2B,rgba(224,30,43,0))" }} />
