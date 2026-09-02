@@ -2,6 +2,12 @@
 
 import { useState, useEffect } from "react"
 
+const RIO_NAVY = "#0A2E52"
+const RIO_DARK_NAVY = "#071A2E"
+const RIO_RED = "#E01E2B"
+const RIO_RED_HOVER = "#FF2E3C"
+const RIO_MUTED = "#9DB8DA"
+
 export default function UnderConstructionPage() {
   const [progress, setProgress] = useState(0)
   const [showNotifyModal, setShowNotifyModal] = useState(false)
@@ -23,15 +29,15 @@ export default function UnderConstructionPage() {
         flexDirection: "column",
         justifyContent: "space-between",
         alignItems: "center",
-        padding: "36px 40px",
+        padding: "32px 36px",
         boxSizing: "border-box",
         color: "#ffffff",
-        fontFamily: "'Inter', system-ui, -apple-system, sans-serif",
-        background: "radial-gradient(circle at 50% 40%, #1e2936 0%, #0d1217 75%, #080b0e 100%)",
+        fontFamily: "var(--font-manrope), system-ui, -apple-system, sans-serif",
+        background: `radial-gradient(circle at 50% 35%, ${RIO_NAVY} 0%, ${RIO_DARK_NAVY} 70%, #040e1a 100%)`,
         overflow: "hidden",
       }}
     >
-      {/* Ambient Radial Glow */}
+      {/* Ambient Red Glow in Background */}
       <div
         style={{
           position: "absolute",
@@ -40,8 +46,8 @@ export default function UnderConstructionPage() {
           transform: "translate(-50%, -50%)",
           width: "700px",
           height: "700px",
-          background: "radial-gradient(circle, rgba(92, 160, 255, 0.09) 0%, rgba(0, 0, 0, 0) 65%)",
-          filter: "blur(80px)",
+          background: "radial-gradient(circle, rgba(224, 30, 43, 0.14) 0%, rgba(10, 46, 82, 0) 65%)",
+          filter: "blur(90px)",
           pointerEvents: "none",
         }}
       />
@@ -57,35 +63,59 @@ export default function UnderConstructionPage() {
           zIndex: 10,
         }}
       >
-        <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src="/logo.png"
-            alt="Rio Overseas"
-            style={{ height: 42, width: "auto", filter: "brightness(0) invert(1)", opacity: 0.9 }}
-          />
+        <div style={{ display: "flex", alignItems: "center", gap: "14px" }}>
+          <div
+            style={{
+              background: "#ffffff",
+              padding: "6px 14px",
+              borderRadius: "10px",
+              display: "inline-flex",
+              alignItems: "center",
+              boxShadow: "0 8px 20px rgba(0,0,0,0.25)",
+            }}
+          >
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="/logo.png"
+              alt="Rio Overseas Pvt. Ltd."
+              style={{ height: 38, width: "auto", display: "block" }}
+            />
+          </div>
           <span
             style={{
               fontSize: "13px",
-              fontWeight: 700,
-              letterSpacing: "0.12em",
-              color: "rgba(255,255,255,0.75)",
+              fontWeight: 800,
+              letterSpacing: "0.14em",
+              color: "#ffffff",
               textTransform: "uppercase",
+              fontFamily: "var(--font-sora), sans-serif",
             }}
           >
-            Rio Overseas Pvt. Ltd.
+            Rio Overseas <span style={{ color: RIO_RED }}>Pvt. Ltd.</span>
           </span>
         </div>
         <a
           href="#home"
           style={{
-            color: "#60A5FA",
-            fontSize: "12px",
-            fontWeight: 700,
+            color: RIO_RED,
+            fontSize: "13px",
+            fontWeight: 800,
             letterSpacing: "0.18em",
             textTransform: "uppercase",
             textDecoration: "none",
-            transition: "opacity 0.2s ease",
+            background: "rgba(224, 30, 43, 0.12)",
+            border: `1px solid rgba(224, 30, 43, 0.3)`,
+            padding: "8px 18px",
+            borderRadius: "999px",
+            transition: "all 0.2s ease",
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.background = RIO_RED
+            e.currentTarget.style.color = "#ffffff"
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.background = "rgba(224, 30, 43, 0.12)"
+            e.currentTarget.style.color = RIO_RED
           }}
         >
           HOME
@@ -102,7 +132,7 @@ export default function UnderConstructionPage() {
           textAlign: "center",
           zIndex: 10,
           margin: "auto 0",
-          maxWidth: "760px",
+          maxWidth: "780px",
           width: "100%",
           padding: "40px 20px",
         }}
@@ -110,23 +140,23 @@ export default function UnderConstructionPage() {
         {/* MAIN TYPOGRAPHY */}
         <h1
           style={{
-            fontSize: "clamp(42px, 7vw, 78px)",
+            fontSize: "clamp(42px, 7vw, 76px)",
             fontWeight: 800,
             lineHeight: 1.04,
             letterSpacing: "0.08em",
             textTransform: "uppercase",
-            margin: "0 0 26px",
+            margin: "0 0 24px",
             color: "#ffffff",
-            fontFamily: "var(--font-sora), 'Arial Narrow', sans-serif",
-            textShadow: "0 10px 40px rgba(0,0,0,0.5)",
+            fontFamily: "var(--font-sora), sans-serif",
+            textShadow: "0 10px 40px rgba(0,0,0,0.6)",
           }}
         >
           UNDER
           <br />
-          CONSTRUCTION
+          <span style={{ color: RIO_RED }}>CONSTRUCTION</span>
         </h1>
 
-        {/* SUBTITLE WITH FLANKING LINES */}
+        {/* SUBTITLE WITH FLANKING RED LINES */}
         <div
           style={{
             display: "flex",
@@ -137,41 +167,43 @@ export default function UnderConstructionPage() {
             justifyContent: "center",
           }}
         >
-          <div style={{ height: "1px", width: "50px", background: "rgba(255,255,255,0.2)" }} />
+          <div style={{ height: "2px", width: "50px", background: `linear-gradient(90deg, transparent, ${RIO_RED})` }} />
           <span
             style={{
-              fontSize: "12.5px",
-              fontWeight: 700,
+              fontSize: "13px",
+              fontWeight: 800,
               letterSpacing: "0.28em",
               textTransform: "uppercase",
-              color: "rgba(255, 255, 255, 0.75)",
+              color: "#ffffff",
+              fontFamily: "var(--font-sora), sans-serif",
             }}
           >
             SITE NEARLY READY
           </span>
-          <div style={{ height: "1px", width: "50px", background: "rgba(255,255,255,0.2)" }} />
+          <div style={{ height: "2px", width: "50px", background: `linear-gradient(90deg, ${RIO_RED}, transparent)` }} />
         </div>
 
-        {/* PROGRESS BAR */}
+        {/* PROGRESS BAR WITH RIO RED ACCENT */}
         <div style={{ width: "100%", maxWidth: "360px", marginBottom: "38px" }}>
           <div
             style={{
               width: "100%",
-              height: "7px",
-              background: "rgba(255, 255, 255, 0.16)",
+              height: "8px",
+              background: "rgba(255, 255, 255, 0.14)",
               borderRadius: "999px",
               overflow: "hidden",
               position: "relative",
+              border: "1px solid rgba(255, 255, 255, 0.08)",
             }}
           >
             <div
               style={{
                 height: "100%",
                 width: `${progress}%`,
-                background: "linear-gradient(90deg, #60A5FA 0%, #3B82F6 100%)",
+                background: `linear-gradient(90deg, ${RIO_RED} 0%, #FF525F 100%)`,
                 borderRadius: "999px",
                 transition: "width 1.6s cubic-bezier(0.16, 1, 0.3, 1)",
-                boxShadow: "0 0 14px rgba(96, 165, 250, 0.7)",
+                boxShadow: `0 0 16px ${RIO_RED}`,
               }}
             />
           </div>
@@ -180,8 +212,8 @@ export default function UnderConstructionPage() {
               display: "flex",
               justifyContent: "space-between",
               fontSize: "11px",
-              fontWeight: 600,
-              color: "rgba(255, 255, 255, 0.45)",
+              fontWeight: 700,
+              color: RIO_MUTED,
               marginTop: "8px",
               letterSpacing: "0.06em",
             }}
@@ -195,25 +227,28 @@ export default function UnderConstructionPage() {
         <button
           onClick={() => setShowNotifyModal(true)}
           style={{
-            background: "#60A5FA",
-            color: "#0F172A",
+            background: RIO_RED,
+            color: "#ffffff",
             border: "none",
-            padding: "13px 36px",
-            borderRadius: "4px",
-            fontSize: "13px",
-            fontWeight: 700,
-            letterSpacing: "0.08em",
+            padding: "14px 38px",
+            borderRadius: "6px",
+            fontSize: "13.5px",
+            fontWeight: 800,
+            letterSpacing: "0.1em",
+            textTransform: "uppercase",
             cursor: "pointer",
             transition: "all 0.2s ease",
-            boxShadow: "0 8px 24px -6px rgba(96, 165, 250, 0.45)",
+            boxShadow: "0 10px 28px -6px rgba(224, 30, 43, 0.65)",
           }}
           onMouseEnter={(e) => {
-            e.currentTarget.style.background = "#7CBDFF"
+            e.currentTarget.style.background = RIO_RED_HOVER
             e.currentTarget.style.transform = "translateY(-2px)"
+            e.currentTarget.style.boxShadow = "0 14px 34px -4px rgba(224, 30, 43, 0.8)"
           }}
           onMouseLeave={(e) => {
-            e.currentTarget.style.background = "#60A5FA"
+            e.currentTarget.style.background = RIO_RED
             e.currentTarget.style.transform = "none"
+            e.currentTarget.style.boxShadow = "0 10px 28px -6px rgba(224, 30, 43, 0.65)"
           }}
         >
           Notify Me
@@ -231,7 +266,7 @@ export default function UnderConstructionPage() {
           zIndex: 10,
         }}
       >
-        {/* CIRCULAR SOCIAL BUTTONS */}
+        {/* CIRCULAR SOCIAL BUTTONS WITH BRAND ACCENTS */}
         <div style={{ display: "flex", gap: "16px" }}>
           {[
             { label: "f", title: "Facebook" },
@@ -251,24 +286,26 @@ export default function UnderConstructionPage() {
                 width: "44px",
                 height: "44px",
                 borderRadius: "50%",
-                border: "1.5px solid rgba(255, 255, 255, 0.28)",
+                border: "1.5px solid rgba(255, 255, 255, 0.3)",
                 display: "grid",
                 placeItems: "center",
-                color: "rgba(255, 255, 255, 0.85)",
+                color: "#ffffff",
                 fontSize: "14px",
-                fontWeight: 600,
+                fontWeight: 700,
                 textDecoration: "none",
                 transition: "all 0.2s ease",
               }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.borderColor = "#60A5FA"
-                e.currentTarget.style.color = "#60A5FA"
-                e.currentTarget.style.background = "rgba(96, 165, 250, 0.12)"
+                e.currentTarget.style.borderColor = RIO_RED
+                e.currentTarget.style.color = "#ffffff"
+                e.currentTarget.style.background = RIO_RED
+                e.currentTarget.style.transform = "translateY(-2px)"
               }}
               onMouseLeave={(e) => {
-                e.currentTarget.style.borderColor = "rgba(255, 255, 255, 0.28)"
-                e.currentTarget.style.color = "rgba(255, 255, 255, 0.85)"
+                e.currentTarget.style.borderColor = "rgba(255, 255, 255, 0.3)"
+                e.currentTarget.style.color = "#ffffff"
                 e.currentTarget.style.background = "transparent"
+                e.currentTarget.style.transform = "none"
               }}
             >
               {item.label}
@@ -280,7 +317,7 @@ export default function UnderConstructionPage() {
         <div
           style={{
             fontSize: "12px",
-            color: "rgba(255, 255, 255, 0.4)",
+            color: RIO_MUTED,
             letterSpacing: "0.04em",
           }}
         >
@@ -288,7 +325,7 @@ export default function UnderConstructionPage() {
         </div>
       </footer>
 
-      {/* CHAT BUBBLE BUTTON (BOTTOM RIGHT) */}
+      {/* CHAT BUBBLE BUTTON (BOTTOM RIGHT IN RIO RED) */}
       <button
         onClick={() => setShowNotifyModal(true)}
         aria-label="Contact Rio Overseas"
@@ -296,17 +333,17 @@ export default function UnderConstructionPage() {
           position: "fixed",
           bottom: "24px",
           right: "24px",
-          width: "48px",
-          height: "48px",
+          width: "50px",
+          height: "50px",
           borderRadius: "50%",
-          background: "#60A5FA",
+          background: RIO_RED,
           border: "none",
-          color: "#0F172A",
+          color: "#ffffff",
           fontSize: "20px",
           display: "grid",
           placeItems: "center",
           cursor: "pointer",
-          boxShadow: "0 8px 24px rgba(96, 165, 250, 0.45)",
+          boxShadow: "0 10px 28px rgba(224, 30, 43, 0.6)",
           zIndex: 20,
           transition: "transform 0.2s ease",
         }}
@@ -322,7 +359,7 @@ export default function UnderConstructionPage() {
           style={{
             position: "fixed",
             inset: 0,
-            background: "rgba(0, 0, 0, 0.8)",
+            background: "rgba(7, 26, 46, 0.85)",
             backdropFilter: "blur(10px)",
             display: "grid",
             placeItems: "center",
@@ -332,13 +369,13 @@ export default function UnderConstructionPage() {
         >
           <div
             style={{
-              background: "#1E293B",
-              border: "1px solid rgba(255, 255, 255, 0.15)",
+              background: RIO_NAVY,
+              border: "1px solid rgba(255, 255, 255, 0.2)",
               borderRadius: "18px",
-              padding: "32px 28px",
+              padding: "34px 30px",
               maxWidth: "440px",
               width: "100%",
-              boxShadow: "0 24px 60px rgba(0,0,0,0.6)",
+              boxShadow: "0 24px 60px rgba(0,0,0,0.7)",
               position: "relative",
               color: "#fff",
               textAlign: "left",
@@ -354,9 +391,9 @@ export default function UnderConstructionPage() {
                 position: "absolute",
                 top: "16px",
                 right: "16px",
-                background: "rgba(255,255,255,0.08)",
+                background: "rgba(255,255,255,0.1)",
                 border: "none",
-                color: "rgba(255,255,255,0.7)",
+                color: "#fff",
                 fontSize: "16px",
                 width: "32px",
                 height: "32px",
@@ -369,10 +406,17 @@ export default function UnderConstructionPage() {
               ✕
             </button>
 
-            <h3 style={{ margin: "0 0 8px", fontSize: "22px", fontWeight: 700, color: "#fff" }}>
-              Rio Overseas Pvt. Ltd.
-            </h3>
-            <p style={{ margin: "0 0 20px", fontSize: "14px", color: "rgba(255,255,255,0.7)", lineHeight: 1.5 }}>
+            <div style={{ display: "flex", alignItems: "center", gap: "12px", marginBottom: "12px" }}>
+              <div style={{ background: "#fff", padding: "4px 10px", borderRadius: "6px" }}>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src="/logo.png" alt="Rio Overseas" style={{ height: 28, width: "auto" }} />
+              </div>
+              <h3 style={{ margin: 0, fontSize: "20px", fontWeight: 800, color: "#fff" }}>
+                Rio Overseas <span style={{ color: RIO_RED }}>Pvt. Ltd.</span>
+              </h3>
+            </div>
+
+            <p style={{ margin: "0 0 20px", fontSize: "14px", color: RIO_MUTED, lineHeight: 1.5 }}>
               हाम्रो आधिकारिक वेब पोर्टल निर्माणाधीन अवस्थामा छ। नयाँ अपडेट र रोजगारीको सूचना प्राप्त गर्न इमेल वा फोन नम्बर छाड्नुहोस्।
             </p>
 
@@ -407,12 +451,12 @@ export default function UnderConstructionPage() {
                   onChange={(e) => setEmail(e.target.value)}
                   style={{
                     width: "100%",
-                    padding: "13px 16px",
+                    padding: "14px 16px",
                     borderRadius: "10px",
-                    border: "1px solid rgba(255,255,255,0.2)",
-                    background: "rgba(15, 23, 42, 0.9)",
+                    border: "1px solid rgba(255,255,255,0.25)",
+                    background: "rgba(7, 26, 46, 0.9)",
                     color: "#fff",
-                    fontSize: "14px",
+                    fontSize: "14.5px",
                     outline: "none",
                     boxSizing: "border-box",
                   }}
@@ -420,15 +464,16 @@ export default function UnderConstructionPage() {
                 <button
                   type="submit"
                   style={{
-                    background: "#60A5FA",
-                    color: "#0F172A",
+                    background: RIO_RED,
+                    color: "#ffffff",
                     border: "none",
-                    padding: "13px",
+                    padding: "14px",
                     borderRadius: "10px",
-                    fontSize: "14px",
-                    fontWeight: 700,
+                    fontSize: "14.5px",
+                    fontWeight: 800,
+                    letterSpacing: "0.06em",
                     cursor: "pointer",
-                    boxShadow: "0 8px 20px rgba(96, 165, 250, 0.4)",
+                    boxShadow: "0 10px 24px -4px rgba(224, 30, 43, 0.6)",
                   }}
                 >
                   Notify Me / जानकारी दिनुहोस्
