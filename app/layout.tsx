@@ -18,6 +18,9 @@ export const metadata: Metadata = {
   title: "Rio Overseas Pvt. Ltd. — Global Opportunities for Nepalese Talent",
   description:
     "Ethical, government-licensed recruitment connecting Nepalese talent with jobs across the Gulf, Europe and beyond.",
+  verification: {
+    google: "BcO8dWwe2RCWvyW-lZ8Oq0z1S_y_ouVqCbnG4SBTlYY",
+  },
 };
 
 export default function RootLayout({
