@@ -827,7 +827,7 @@ export function FullSite() {
     <div style={{ position: "relative", overflowX: "clip", fontFamily: "var(--font-manrope), system-ui, sans-serif", color: INK, background: "#fff" }}>
       {/* ============ NAV — morphing scroll navbar ============ */}
       <MorphingScrollNavbar
-        brand={<Logo height={38} />}
+        brand={<Logo height={48} />}
         brandHref="#home"
         links={navLinks}
         accent={RED}
