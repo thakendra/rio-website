@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Sora, Manrope } from "next/font/google";
 import "./globals.css";
+import { ScrollReveal } from "./scroll-reveal";
 
 const sora = Sora({
   variable: "--font-sora",
@@ -30,7 +31,16 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={`${sora.variable} ${manrope.variable} h-full antialiased`}>
-      <body className="min-h-full flex flex-col">{children}</body>
+      <head>
+        {/* keep content visible if JavaScript is unavailable */}
+        <noscript>
+          <style>{`.reveal{opacity:1 !important;translate:none !important}`}</style>
+        </noscript>
+      </head>
+      <body className="min-h-full flex flex-col">
+        {children}
+        <ScrollReveal />
+      </body>
     </html>
   );
 }
