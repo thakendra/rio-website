@@ -36,6 +36,17 @@ export default function RadialOrbitalTimeline({
   });
   const [activeNodeId, setActiveNodeId] = useState<number | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
+  // orbit radius follows the available width so badges never leave narrow screens
+  const [radius, setRadius] = useState(200);
+  useEffect(() => {
+    const el = containerRef.current;
+    if (!el) return;
+    const fit = () => setRadius(Math.round(Math.max(105, Math.min(200, el.clientWidth / 2 - 62))));
+    fit();
+    const ro = new ResizeObserver(fit);
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, []);
   const orbitRef = useRef<HTMLDivElement>(null);
   const nodeRefs = useRef<Record<number, HTMLDivElement | null>>({});
 
@@ -112,7 +123,6 @@ export default function RadialOrbitalTimeline({
 
   const calculateNodePosition = (index: number, total: number) => {
     const angle = ((index / total) * 360 + rotationAngle) % 360;
-    const radius = 200;
     const radian = (angle * Math.PI) / 180;
 
     const x = radius * Math.cos(radian) + centerOffset.x;
@@ -175,7 +185,7 @@ export default function RadialOrbitalTimeline({
             <div className="w-8 h-8 rounded-full bg-white/80 backdrop-blur-md"></div>
           </div>
 
-          <div className="absolute w-96 h-96 rounded-full border border-[#0A2E52]/12"></div>
+          <div className="absolute rounded-full border border-[#0A2E52]/12" style={{ width: radius * 2 - 16, height: radius * 2 - 16 }}></div>
 
           {timelineData.map((item, index) => {
             const position = calculateNodePosition(index, timelineData.length);
@@ -243,7 +253,7 @@ export default function RadialOrbitalTimeline({
 
                 <div
                   className={`
-                  absolute top-12  whitespace-nowrap
+                  absolute top-12 left-1/2 -translate-x-1/2 whitespace-nowrap
                   text-xs font-semibold tracking-wider
                   transition-all duration-300
                   ${isExpanded ? "text-[#0A2E52] scale-125" : "text-[#0A2E52]"}

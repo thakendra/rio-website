@@ -462,6 +462,8 @@ export interface HarmonicWaveProps {
   showScrollHint?: boolean;
   /** Swap the eight stack images (mapped onto the built-in wave geometry). */
   images?: StackSpreadItem[];
+  /** Optional slot geometry for a different card count; defaults to the built-in eight. */
+  layout?: Omit<StackSpreadCard, "item">[];
   title?: ReactNode;
   sub?: string;
 }
@@ -475,11 +477,13 @@ export default function HarmonicWave({
   textFadeStart = 0.28,
   showScrollHint = true,
   images,
+  layout,
   title,
   sub,
 }: HarmonicWaveProps = {}) {
-  const cards = images
-    ? CARDS.map((card, i) => ({ ...card, item: images[i % images.length] }))
+  const slots: Omit<StackSpreadCard, "item">[] = layout ?? CARDS;
+  const cards: StackSpreadCard[] = images
+    ? slots.map((slot, i) => ({ ...slot, item: images[i % images.length] }))
     : CARDS;
   return (
     <StackSpreadStage

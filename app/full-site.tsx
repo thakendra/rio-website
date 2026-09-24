@@ -5,7 +5,8 @@ import { HeroGlobe } from "@/components/rio/hero-globe"
 import { TextAnimation } from "@/components/ui/text-animation"
 import { MorphingScrollNavbar, type ScrollNavLink } from "@/components/ui/morphing-scroll-navbar"
 import RadialOrbitalTimeline from "@/components/ui/radial-orbital-timeline"
-import HarmonicWave from "@/components/ui/harmonic-wave"
+import HarmonicWave, { type StackSpreadCard } from "@/components/ui/harmonic-wave"
+import { motion } from "motion/react"
 import { ShieldCheck, FileCheck2, BadgeCheck, UserCheck, Zap, HeartPulse, Clock } from "lucide-react"
 import { ToolDock, ToolDockTile } from "@/components/ui/techstack"
 import { InteractiveHoverButton } from "@/components/ui/interactive-hover-button"
@@ -240,25 +241,46 @@ const sectors = [
 ]
 
 /* MANPOWER WE SUPPLY — five tiers */
-const manpowerTiers: { icon: IcoName; title: string; desc: string; roles: string[]; image: string }[] = [
-  { icon: "brief", title: "Professional", desc: "Degree-qualified specialists for senior and technical placements.", roles: ["Engineers", "Healthcare", "IT & Software", "Accountants", "Managers"], image: "/gallery/types/professional.jpg" },
-  { icon: "shield", title: "Skilled", desc: "Certified, trade-tested tradespeople for construction and industry.", roles: ["Welders", "Electricians", "Plumbers", "Masons", "Heavy Drivers"], image: "/gallery/types/welder.jpg" },
-  { icon: "users", title: "Semi-Skilled", desc: "Vocationally trained workers with real hands-on experience.", roles: ["Hospitality", "Machine Operators", "Technicians", "Salesmen", "Storekeepers"], image: "/gallery/types/hospitality.jpg" },
-  { icon: "trend", title: "Unskilled", desc: "Reliable general labour, ready for large-scale bulk demand.", roles: ["General Labour", "Cleaners", "Warehouse", "Factory Hands", "Loaders"], image: "/gallery/types/construction.jpg" },
-  { icon: "award", title: "Security & Gurkha", desc: "Disciplined security personnel in the proud Gurkha tradition.", roles: ["Security Guards", "Watchmen", "Camp Security", "Corporate Guards"], image: "/gallery/team.jpg" },
+const manpowerTiers: { icon: IcoName; title: string; level: string; desc: string; roles: string[]; photos: string[] }[] = [
+  { icon: "brief", title: "Professional", level: "Degree / Diploma", desc: "Degree-qualified specialists for senior and technical placements — engineers, healthcare staff and office professionals.", roles: ["Engineers", "Healthcare", "IT & Software", "Accountants", "Managers"], photos: ["/gallery/types/engineer.jpg", "/gallery/types/healthcare.jpg", "/gallery/types/professional.jpg"] },
+  { icon: "shield", title: "Skilled", level: "Trade-certified", desc: "Certified, trade-tested tradespeople for construction, maintenance and industry — ready to work from day one.", roles: ["Welders", "Electricians", "Plumbers", "Masons", "Heavy Drivers"], photos: ["/gallery/types/welder.jpg", "/gallery/supply/facility-management.jpg", "/gallery/types/construction.jpg"] },
+  { icon: "users", title: "Semi-Skilled", level: "Vocational training", desc: "Vocationally trained workers with real hands-on experience across hotels, restaurants and retail floors.", roles: ["Hospitality", "Cooks & Stewards", "Machine Operators", "Salesmen", "Storekeepers"], photos: ["/gallery/supply/hospitality.jpg", "/gallery/supply/restaurant.jpg", "/gallery/supply/retail.jpg"] },
+  { icon: "trend", title: "Unskilled", level: "Job-ready, trained on site", desc: "Reliable general labour for warehouses, factories and cleaning — available for large-scale bulk demand.", roles: ["General Labour", "Cleaners", "Warehouse", "Factory Hands", "Loaders"], photos: ["/gallery/supply/warehouse.jpg", "/gallery/supply/manufacturing.jpg", "/gallery/supply/cleaning.jpg"] },
+  { icon: "award", title: "Security & Gurkha", level: "Disciplined & trained", desc: "Disciplined security personnel in the proud Gurkha tradition — for hotels, sites, camps and corporate premises.", roles: ["Security Guards", "Watchmen", "Camp Security", "Corporate Guards"], photos: ["/gallery/supply/security.jpg"] },
 ]
 const workerBadges = ["Extensive Network", "Quality Manpower", "Ethical Recruitment", "Global Opportunities"]
 
 /* WHAT WE SUPPLY — converging photos of every worker type */
 const supplyPhotos = [
   { src: "/gallery/types/construction.jpg", alt: "Construction workers", label: "Construction" },
-  { src: "/gallery/types/welder.jpg", alt: "Warehouse crew", label: "Warehouse" },
-  { src: "/gallery/types/industrial.jpg", alt: "Factory & manufacturing crew", label: "Manufacturing" },
-  { src: "/gallery/types/healthcare.jpg", alt: "Healthcare professional", label: "Healthcare" },
-  { src: "/gallery/types/hospitality.jpg", alt: "Hospitality & chef", label: "Hospitality" },
-  { src: "/gallery/types/logistics.jpg", alt: "Driver & logistics", label: "Logistics" },
-  { src: "/gallery/types/engineer.jpg", alt: "Warehouse crew", label: "Warehouse" },
-  { src: "/gallery/team-2.jpg", alt: "Security personnel", label: "Security" },
+  { src: "/gallery/supply/warehouse.jpg", alt: "Warehouse crew", label: "Warehouse" },
+  { src: "/gallery/supply/manufacturing.jpg", alt: "Factory & manufacturing crew", label: "Manufacturing" },
+  { src: "/gallery/supply/hospitality.jpg", alt: "Hospitality staff", label: "Hospitality" },
+  { src: "/gallery/supply/logistics.jpg", alt: "Driver & logistics", label: "Logistics" },
+  { src: "/gallery/supply/security.jpg", alt: "Security personnel", label: "Security" },
+  { src: "/gallery/supply/cleaning.jpg", alt: "Cleaning team", label: "Cleaning" },
+  { src: "/gallery/supply/facility-management.jpg", alt: "Facility management technicians", label: "Facility Management" },
+  { src: "/gallery/supply/hotels.jpg", alt: "Hotel front desk", label: "Hotels" },
+  { src: "/gallery/supply/restaurant.jpg", alt: "Restaurant chefs", label: "Restaurant" },
+  { src: "/gallery/supply/retail.jpg", alt: "Retail staff", label: "Retail" },
+]
+
+/* slot geometry for the 11 cards: wave start → converged frame around the headline */
+const supplyLayout: Omit<StackSpreadCard, "item">[] = [
+  // top row
+  { waveOffset: { x: -40, y: -12 }, waveRotate: -6, target: { x: -26, y: -35, rotate: -4, scale: 0.82, w: 16, h: 22 }, targetSm: { x: -22, y: -44 }, z: 2 },
+  { waveOffset: { x: -32, y: 12 }, waveRotate: -4, target: { x: 0, y: -36, rotate: 2, scale: 0.8, w: 17, h: 22 }, targetSm: { x: 22, y: -44 }, z: 3 },
+  { waveOffset: { x: -24, y: -16 }, waveRotate: -2, target: { x: 26, y: -34, rotate: 4, scale: 0.82, w: 16, h: 22 }, targetSm: { x: -22, y: -30 }, z: 4 },
+  // side columns
+  { waveOffset: { x: -16, y: 14 }, waveRotate: 0, target: { x: -40, y: -11, rotate: -3, scale: 0.8, w: 14, h: 20 }, targetSm: { x: 22, y: -30 }, z: 5 },
+  { waveOffset: { x: -8, y: -14 }, waveRotate: 3, target: { x: 40, y: -11, rotate: 3, scale: 0.8, w: 14, h: 20 }, targetSm: { x: -22, y: -16 }, z: 6 },
+  { waveOffset: { x: 0, y: 16 }, waveRotate: -3, target: { x: -40, y: 14, rotate: 3, scale: 0.8, w: 14, h: 20 }, targetSm: { x: 22, y: -16 }, z: 7 },
+  { waveOffset: { x: 8, y: -12 }, waveRotate: 2, target: { x: 40, y: 14, rotate: -3, scale: 0.8, w: 14, h: 20 }, targetSm: { x: -22, y: 16 }, z: 8 },
+  // bottom row
+  { waveOffset: { x: 16, y: 10 }, waveRotate: 4, target: { x: -33, y: 36, rotate: 4, scale: 0.8, w: 15, h: 21 }, targetSm: { x: 22, y: 16 }, z: 9 },
+  { waveOffset: { x: 24, y: -14 }, waveRotate: 5, target: { x: -11, y: 38, rotate: -2, scale: 0.8, w: 16, h: 21 }, targetSm: { x: -22, y: 30 }, z: 10 },
+  { waveOffset: { x: 32, y: 12 }, waveRotate: 6, target: { x: 11, y: 37, rotate: 3, scale: 0.8, w: 16, h: 21 }, targetSm: { x: 22, y: 30 }, z: 11 },
+  { waveOffset: { x: 40, y: -10 }, waveRotate: 7, target: { x: 33, y: 35, rotate: -4, scale: 0.8, w: 15, h: 21 }, targetSm: { x: 0, y: 44 }, z: 12 },
 ]
 
 
@@ -472,7 +494,7 @@ export function PhoneIcon() {
   )
 }
 export const eyebrow: React.CSSProperties = { fontFamily: SORA, fontSize: 13, fontWeight: 700, letterSpacing: ".22em", color: RED, marginBottom: 14 }
-export const h2: React.CSSProperties = { fontFamily: SORA, fontWeight: 800, fontSize: 44, lineHeight: 1.08, letterSpacing: "-.02em", color: NAVY, margin: 0 }
+export const h2: React.CSSProperties = { fontFamily: SORA, fontWeight: 800, fontSize: "clamp(30px, 7.4vw, 44px)", lineHeight: 1.08, letterSpacing: "-.02em", color: NAVY, margin: 0 }
 
 /* animated section heading — GSAP block-wipe reveal on scroll */
 export function AnimatedH2({ text, dark = false, size = "clamp(2rem, 4.6vw, 2.9rem)", delay = 0 }: { text: string; dark?: boolean; size?: string; delay?: number }) {
@@ -548,7 +570,7 @@ function GoogleReviews() {
         </div>
 
         {/* summary bar */}
-        <div className="reveal" style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 20, flexWrap: "wrap", background: "#fff", border: `1px solid ${LINE}`, borderRadius: 20, padding: "22px 28px", boxShadow: "0 22px 50px -38px rgba(11,36,71,.5)", marginBottom: 34, maxWidth: 720, marginInline: "auto" }}>
+        <div className="reveal rv-summary" style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 20, flexWrap: "wrap", background: "#fff", border: `1px solid ${LINE}`, borderRadius: 20, padding: "22px 28px", boxShadow: "0 22px 50px -38px rgba(11,36,71,.5)", marginBottom: 34, maxWidth: 720, marginInline: "auto" }}>
           <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
             <GoogleG size={34} />
             <div>
@@ -556,16 +578,16 @@ function GoogleReviews() {
               <div style={{ fontSize: 12.5, color: MUT }}>Based on {googleRating.count} reviews</div>
             </div>
           </div>
-          <div style={{ width: 1, height: 40, background: LINE2 }} />
+          <div className="rv-divider" style={{ width: 1, height: 40, background: LINE2 }} />
           <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
             <span style={{ fontFamily: SORA, fontWeight: 800, fontSize: 40, color: NAVY, lineHeight: 1 }}>{googleRating.score.toFixed(1)}</span>
             <div><Stars n={5} size={18} /><div style={{ fontSize: 12, color: MUT, marginTop: 3 }}>Excellent rating</div></div>
           </div>
-          <a href={GOOGLE_REVIEWS_URL} target="_blank" rel="noopener noreferrer" style={{ marginLeft: "auto", display: "inline-flex", alignItems: "center", gap: 8, background: NAVY, color: "#fff", padding: "12px 20px", borderRadius: 999, fontSize: 14, fontWeight: 700, textDecoration: "none" }}>Write a review <span>→</span></a>
+          <a href={GOOGLE_REVIEWS_URL} target="_blank" rel="noopener noreferrer" className="rv-cta" style={{ marginLeft: "auto", display: "inline-flex", alignItems: "center", gap: 8, background: NAVY, color: "#fff", padding: "12px 20px", borderRadius: 999, fontSize: 14, fontWeight: 700, textDecoration: "none" }}>Write a review <span>→</span></a>
         </div>
 
         {/* review cards */}
-        <div className="cols3" style={{ gap: 22 }}>
+        <div className="cols3 rv-cards" style={{ gap: 22 }}>
           {reviews.map((r, i) => (
             <div key={r.name} className="reveal hov-6" style={{ transitionDelay: `${i * 60}ms`, background: "#fff", border: `1px solid ${LINE}`, borderRadius: 18, padding: "24px 24px", boxShadow: "0 20px 46px -34px rgba(11,36,71,.5)" }}>
               <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 14 }}>
@@ -624,6 +646,48 @@ function SectorCard({ icon, name, desc, red, delay }: { icon: string; name: stri
   )
 }
 
+/* ---------------- What We Supply — phone/tablet layout ---------------- */
+function SupplyMobile() {
+  return (
+    <section style={{ position: "relative", overflow: "hidden", background: "#0a0a0a", padding: "72px 20px" }}>
+      <div style={{ position: "absolute", inset: 0, background: "radial-gradient(70% 38% at 50% 12%, rgba(79,70,229,.2), transparent 70%)", pointerEvents: "none" }} />
+      <div style={{ position: "relative", textAlign: "center", maxWidth: 520, margin: "0 auto 30px" }}>
+        <h2 style={{ fontFamily: SORA, fontWeight: 300, fontSize: "clamp(34px, 10vw, 52px)", lineHeight: 1.05, letterSpacing: "-.03em", color: "#fff", margin: 0 }}>
+          What We <span style={{ color: "#FF5A63", fontWeight: 400 }}>Supply</span>.
+        </h2>
+        <p style={{ fontSize: 15, lineHeight: 1.6, color: "rgba(255,255,255,.62)", margin: "14px 0 0" }}>
+          Skilled Nepali workers for every trade and every level — screened, trade-tested and ready to deploy across the Gulf, Europe &amp; Asia.
+        </p>
+      </div>
+      <div style={{ position: "relative", display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, maxWidth: 620, margin: "0 auto" }}>
+        {supplyPhotos.map((p, i) => {
+          const wide = supplyPhotos.length % 2 === 1 && i === supplyPhotos.length - 1
+          return (
+            <motion.div
+              key={p.src}
+              initial={{ opacity: 0, y: 28, scale: 0.96 }}
+              whileInView={{ opacity: 1, y: 0, scale: 1 }}
+              whileTap={{ scale: 0.97 }}
+              viewport={{ once: true, margin: "-40px" }}
+              transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1], delay: (i % 2) * 0.08 }}
+              style={{ position: "relative", gridColumn: wide ? "1 / -1" : undefined, aspectRatio: wide ? "16 / 9" : "4 / 5", borderRadius: 16, overflow: "hidden", boxShadow: "0 18px 40px -22px rgba(0,0,0,.8), inset 0 0 0 1px rgba(255,255,255,.08)" }}
+            >
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={p.src} alt={p.alt} loading="lazy" style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover" }} />
+              <div style={{ position: "absolute", inset: "auto 0 0 0", height: "62%", background: "linear-gradient(0deg, rgba(0,0,0,.82), rgba(0,0,0,.25) 55%, transparent)" }} />
+              <div style={{ position: "absolute", left: 12, right: 12, bottom: 12, display: "flex", flexDirection: "column" }}>
+                <span style={{ fontFamily: "ui-monospace, monospace", fontSize: 10, letterSpacing: ".25em", color: "rgba(255,255,255,.6)" }}>{String(i + 1).padStart(2, "0")}</span>
+                <span style={{ marginTop: 3, fontFamily: SORA, fontWeight: 700, fontSize: 13, letterSpacing: ".1em", textTransform: "uppercase", color: "#fff", lineHeight: 1.15 }}>{p.label}</span>
+                <span style={{ marginTop: 7, width: 26, height: 2, borderRadius: 2, background: "#FF5A63" }} />
+              </div>
+            </motion.div>
+          )
+        })}
+      </div>
+    </section>
+  )
+}
+
 /* ---------------- interactive process timeline ---------------- */
 function ProcessTimeline() {
   const [active, setActive] = useState(0)
@@ -652,9 +716,9 @@ function ProcessTimeline() {
     <div ref={wrapRef} onMouseLeave={() => setPaused(false)} style={{ position: "relative" }}>
       <style>{`@keyframes procPulse { 0%,100% { box-shadow: 0 0 0 0 rgba(224,30,43,.5);} 50% { box-shadow: 0 0 0 12px rgba(224,30,43,0);} }`}</style>
       {/* base + progress line */}
-      <div style={{ position: "absolute", top: 32, left: "5%", right: "5%", height: 3, background: "#DCE7F4", borderRadius: 2 }} />
-      <div style={{ position: "absolute", top: 32, left: "5%", width: `${pct * 0.9}%`, height: 3, background: `linear-gradient(90deg,${RED},#ff6a72)`, borderRadius: 2, transition: "width .6s cubic-bezier(.22,1,.36,1)" }} />
-      <div className="cols8" style={{ position: "relative", gap: 8 }}>
+      <div className="proc-line" style={{ position: "absolute", top: 32, left: "5%", right: "5%", height: 3, background: "#DCE7F4", borderRadius: 2 }} />
+      <div className="proc-line" style={{ position: "absolute", top: 32, left: "5%", width: `${pct * 0.9}%`, height: 3, background: `linear-gradient(90deg,${RED},#ff6a72)`, borderRadius: 2, transition: "width .6s cubic-bezier(.22,1,.36,1)" }} />
+      <div className="cols8 proc-steps" style={{ position: "relative", gap: 8 }}>
         {processSteps.map((p, i) => {
           const done = i <= active
           const isActive = i === active
@@ -665,10 +729,11 @@ function ProcessTimeline() {
               onClick={() => setActive(i)}
               onMouseEnter={() => { setPaused(true); setActive(i) }}
               onFocus={() => { setPaused(true); setActive(i) }}
+              className="proc-step"
               style={{ background: "transparent", border: "none", cursor: "pointer", textAlign: "center", padding: 0 }}
               aria-pressed={isActive}
             >
-              <div style={{
+              <div className="proc-dot" style={{
                 width: 64, height: 64, margin: "0 auto 16px", borderRadius: "50%",
                 background: done ? RED : "#fff",
                 border: `2px solid ${RED}`,
@@ -679,8 +744,10 @@ function ProcessTimeline() {
                 animation: isActive ? "procPulse 1.6s ease-in-out infinite" : "none",
                 boxShadow: done ? "0 14px 30px -16px rgba(224,30,43,.6)" : "0 8px 20px -14px rgba(11,36,71,.3)",
               }}>{p.num}</div>
-              <div style={{ fontFamily: SORA, fontWeight: 700, fontSize: 15, color: isActive ? RED : NAVY, transition: "color .3s ease", marginBottom: 5 }}>{p.name}</div>
-              <div style={{ fontSize: 12, color: MUT, lineHeight: 1.4, padding: "0 4px", opacity: isActive ? 1 : 0.75, transition: "opacity .3s ease" }}>{p.desc}</div>
+              <div>
+                <div className="proc-name" style={{ fontFamily: SORA, fontWeight: 700, fontSize: 15, color: isActive ? RED : NAVY, transition: "color .3s ease", marginBottom: 5 }}>{p.name}</div>
+                <div className="proc-desc" style={{ fontSize: 12, color: MUT, lineHeight: 1.4, padding: "0 4px", opacity: isActive ? 1 : 0.75, transition: "opacity .3s ease" }}>{p.desc}</div>
+              </div>
             </button>
           )
         })}
@@ -692,77 +759,148 @@ function ProcessTimeline() {
 /* ---------------- Manpower interactive showcase ---------------- */
 function ManpowerInfographic() {
   const [active, setActive] = useState(1)
+  const [paused, setPaused] = useState(false)
+  const listRef = useRef<HTMLDivElement>(null)
   const t = manpowerTiers[active]
+  const num = (i: number) => String(i + 1).padStart(2, "0")
+
+  // on narrow screens the tiers become a horizontal strip — keep the active tab in view
+  // (scrolls only the strip itself, never the page)
+  useEffect(() => {
+    const list = listRef.current
+    const row = list?.children[active] as HTMLElement | undefined
+    if (!list || !row || list.scrollWidth <= list.clientWidth) return
+    list.scrollTo({ left: row.offsetLeft - 8, behavior: "smooth" })
+  }, [active])
+
+  // auto-advance through the tiers; pauses while the pointer is over the showcase
+  useEffect(() => {
+    if (paused || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return
+    const id = window.setTimeout(() => setActive((a) => (a + 1) % manpowerTiers.length), 5000)
+    return () => window.clearTimeout(id)
+  }, [active, paused])
 
   return (
-    <div className="mp-wrap">
+    <div className="mp-wrap" onPointerEnter={() => setPaused(true)} onPointerLeave={() => setPaused(false)}>
       <style>{`
-        .mp-wrap { display: grid; grid-template-columns: minmax(0,1fr) minmax(0,1.1fr); gap: 30px; align-items: stretch; }
-        @media (max-width: 900px) { .mp-wrap { grid-template-columns: 1fr; } }
-        .mp-row { position: relative; width: 100%; text-align: left; cursor: pointer; border: 1px solid ${LINE}; background: #fff; border-radius: 16px; padding: 18px 20px; margin-bottom: 12px; display: flex; align-items: center; gap: 14px; transition: transform .25s ease, box-shadow .25s ease, border-color .25s ease, background .25s ease; }
-        .mp-row:hover { transform: translateX(4px); }
-        .mp-row.on { border-color: transparent; background: linear-gradient(150deg,${NAVY},#12386a); box-shadow: 0 22px 44px -26px rgba(11,36,71,.6); }
-        .mp-row.on .mp-title { color: #fff; }
+        .mp-wrap { display: grid; grid-template-columns: minmax(0,.9fr) minmax(0,1.35fr); gap: 28px; align-items: stretch; }
+        .mp-list { position: relative; display: flex; flex-direction: column; gap: 12px; }
+        .mp-row { position: relative; overflow: hidden; width: 100%; flex: 1; text-align: left; cursor: pointer; border: 1px solid ${LINE}; background: #fff; border-radius: 18px; padding: 14px 16px 14px 18px; display: flex; align-items: center; gap: 14px; transition: transform .3s ease, box-shadow .3s ease, border-color .3s ease, background .3s ease; }
+        .mp-row:hover { border-color: ${LINE2}; box-shadow: 0 16px 34px -26px rgba(11,36,71,.5); transform: translateX(4px); }
+        .mp-row.on { border-color: transparent; background: linear-gradient(135deg,${NAVY},#12386a); box-shadow: 0 24px 46px -26px rgba(11,36,71,.65); transform: translateX(6px); }
+        .mp-num { flex: none; font-family: ui-monospace, monospace; font-size: 12px; font-weight: 700; letter-spacing: .1em; color: #9DB4D0; width: 20px; }
+        .mp-ico { flex: none; display: grid; place-items: center; width: 44px; height: 44px; border-radius: 12px; background: #EAF2FD; color: ${NAVY}; transition: background .3s ease, color .3s ease; }
+        .mp-text { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 3px; }
+        .mp-title { font-family: ${SORA}; font-weight: 800; font-size: 16.5px; color: ${NAVY}; }
+        .mp-sub { font-size: 12.5px; font-weight: 600; color: ${MUT}; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .mp-thumb { flex: none; width: 58px; height: 46px; border-radius: 10px; overflow: hidden; opacity: .55; filter: grayscale(1); transition: opacity .3s ease, filter .3s ease, transform .3s ease; }
+        .mp-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+        .mp-row:hover .mp-thumb { opacity: .9; filter: grayscale(.2); }
+        .mp-row.on .mp-num { color: #FFC2C7; }
         .mp-row.on .mp-ico { background: ${RED}; color: #fff; }
-        .mp-row.on .mp-arrow { color: #fff; transform: translateX(0); opacity: 1; }
-        .mp-title { font-family: ${SORA}; font-weight: 800; font-size: 17px; color: ${NAVY}; flex: 1; }
-        .mp-ico { flex: none; display: grid; place-items: center; width: 46px; height: 46px; border-radius: 12px; background: #EAF2FD; color: ${NAVY}; transition: background .25s ease, color .25s ease; }
-        .mp-arrow { color: ${MUT}; font-size: 18px; opacity: 0; transform: translateX(-6px); transition: all .25s ease; }
-        .mp-panel { border-radius: 22px; overflow: hidden; background: linear-gradient(160deg,${DEEP},#0A1A30); color: #fff; position: relative; display: flex; flex-direction: column; }
-        .mp-anim { animation: mpIn .5s cubic-bezier(.22,1,.36,1) both; display: flex; flex-direction: column; flex: 1; }
-        @keyframes mpIn { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
-        .mp-photo { position: relative; height: 240px; overflow: hidden; }
-        .mp-photo img { width: 100%; height: 100%; object-fit: cover; display: block; animation: mpZoom 6s ease forwards; }
-        @keyframes mpZoom { from { transform: scale(1.08); } to { transform: scale(1); } }
-        .mp-photo::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(10,26,48,.15) 0%, rgba(10,26,48,.85) 100%); }
-        .mp-chip { display: inline-block; font-size: 13px; font-weight: 600; color: #EAF1FA; background: rgba(255,255,255,.08); border: 1px solid rgba(157,184,218,.22); border-radius: 999px; padding: 8px 14px; opacity: 0; animation: mpChip .45s ease forwards; }
-        @keyframes mpChip { from { opacity: 0; transform: translateY(8px) scale(.96); } to { opacity: 1; transform: none; } }
+        .mp-row.on .mp-title { color: #fff; }
+        .mp-row.on .mp-sub { color: ${MUT2}; }
+        .mp-row.on .mp-thumb { opacity: 1; filter: none; transform: scale(1.04); box-shadow: 0 0 0 2px rgba(255,255,255,.85); }
+        .mp-prog { position: absolute; left: 0; bottom: 0; height: 3px; width: 100%; background: ${RED}; transform-origin: left; animation: mpProg 5s linear forwards; }
+        @keyframes mpProg { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+
+        .mp-panel { border-radius: 24px; overflow: hidden; background: linear-gradient(160deg,${DEEP},#0A1A30); color: #fff; box-shadow: 0 40px 80px -44px rgba(11,36,71,.7); }
+        .mp-anim { height: 100%; display: flex; flex-direction: column; animation: mpIn .55s cubic-bezier(.22,1,.36,1) both; }
+        @keyframes mpIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
+        .mp-collage { position: relative; height: 300px; display: grid; gap: 6px; padding: 6px 6px 0; }
+        .mp-collage.n3 { grid-template-columns: 1.55fr 1fr; grid-template-rows: 1fr 1fr; }
+        .mp-collage.n3 .mp-ph:first-child { grid-row: 1 / 3; }
+        .mp-collage.n2 { grid-template-columns: 1.4fr 1fr; }
+        .mp-ph { position: relative; overflow: hidden; border-radius: 18px; }
+        .mp-ph img { width: 100%; height: 100%; object-fit: cover; display: block; animation: mpZoom 7s ease-out forwards; }
+        .mp-ph:nth-child(2) img { animation-delay: .08s; }
+        .mp-ph:nth-child(3) img { animation-delay: .16s; }
+        @keyframes mpZoom { from { transform: scale(1.12); } to { transform: scale(1); } }
+        .mp-ph:first-child::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(10,26,48,0) 45%, rgba(10,26,48,.88) 100%); }
+        .mp-tag { position: absolute; left: 20px; bottom: 18px; z-index: 1; display: flex; align-items: center; gap: 12px; }
+        .mp-tag-title { font-family: ${SORA}; font-weight: 800; font-size: 25px; color: #fff; line-height: 1.1; }
+        .mp-body { padding: 22px 26px 24px; display: flex; flex-direction: column; flex: 1; }
+        .mp-meta { display: inline-flex; align-items: center; gap: 8px; align-self: flex-start; font-size: 12px; font-weight: 700; letter-spacing: .08em; color: #FFC2C7; background: rgba(224,30,43,.14); border: 1px solid rgba(255,90,99,.3); border-radius: 999px; padding: 6px 12px; }
+        .mp-roles { display: grid; grid-template-columns: 1fr 1fr; gap: 10px 18px; margin: 4px 0 22px; }
+        .mp-role { display: flex; align-items: center; gap: 9px; font-size: 14.5px; font-weight: 600; color: #EAF1FA; opacity: 0; animation: mpChip .45s ease forwards; }
+        .mp-role span { flex: none; display: grid; place-items: center; width: 20px; height: 20px; border-radius: 50%; background: rgba(255,255,255,.1); color: #FF7C86; }
+        @keyframes mpChip { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+        .mp-cta { margin-top: auto; align-self: flex-start; display: inline-flex; align-items: center; gap: 10px; background: ${RED}; color: #fff; padding: 13px 22px; border-radius: 999px; font-size: 14.5px; font-weight: 700; box-shadow: 0 16px 30px -14px rgba(224,30,43,.7); transition: transform .2s ease, box-shadow .2s ease; }
+        .mp-cta:hover { transform: translateY(-2px); box-shadow: 0 20px 36px -14px rgba(224,30,43,.8); }
+
+        @media (max-width: 900px) {
+          .mp-wrap { grid-template-columns: 1fr; }
+          .mp-list { flex-direction: row; overflow-x: auto; padding-bottom: 6px; scroll-snap-type: x mandatory; }
+          .mp-row { flex: none; width: auto; scroll-snap-align: start; transform: none !important; }
+          .mp-row .mp-sub, .mp-row .mp-thumb, .mp-row .mp-num { display: none; }
+          .mp-collage { height: 240px; }
+          .mp-tag { left: 14px; bottom: 14px; gap: 10px; }
+          .mp-tag-title { font-size: 18px; white-space: nowrap; }
+          .mp-roles { grid-template-columns: 1fr; }
+        }
       `}</style>
 
       {/* LEFT — tier selector */}
-      <div>
+      <div ref={listRef} className="mp-list" role="tablist" aria-label="Worker categories">
         {manpowerTiers.map((tier, i) => (
           <button
             key={tier.title}
             type="button"
+            role="tab"
+            aria-selected={i === active}
             className={`mp-row${i === active ? " on" : ""}`}
             onMouseEnter={() => setActive(i)}
             onFocus={() => setActive(i)}
             onClick={() => setActive(i)}
-            aria-pressed={i === active}
           >
-            <span className="mp-ico"><Ico name={tier.icon} size={22} /></span>
-            <span className="mp-title">{tier.title}</span>
-            <span className="mp-arrow">→</span>
+            <span className="mp-num">{num(i)}</span>
+            <span className="mp-ico"><Ico name={tier.icon} size={21} /></span>
+            <span className="mp-text">
+              <span className="mp-title">{tier.title}</span>
+              <span className="mp-sub">{tier.level} · {tier.roles.length} key roles</span>
+            </span>
+            <span className="mp-thumb">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={tier.photos[0]} alt="" />
+            </span>
+            {i === active && !paused && <span key={active} className="mp-prog" />}
           </button>
         ))}
       </div>
 
-      {/* RIGHT — photo + description panel */}
-      <div className="mp-panel">
+      {/* RIGHT — photo collage + details */}
+      <div className="mp-panel" role="tabpanel">
         <div key={active} className="mp-anim">
-          {/* photo with title overlay */}
-          <div className="mp-photo">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={t.image} alt={`${t.title} workers`} />
-            <div style={{ position: "absolute", left: 26, right: 26, bottom: 20, zIndex: 1, display: "flex", alignItems: "center", gap: 14 }}>
-              <span style={{ flex: "none", display: "grid", placeItems: "center", width: 52, height: 52, borderRadius: 14, background: RED, color: "#fff" }}><Ico name={t.icon} size={26} /></span>
-              <div>
-                <div style={{ fontSize: 11.5, fontWeight: 700, letterSpacing: ".18em", color: "#FFC2C7" }}>WORKER CATEGORY</div>
-                <div style={{ fontFamily: SORA, fontWeight: 800, fontSize: 26, color: "#fff", lineHeight: 1.1 }}>{t.title}</div>
+          <div className={`mp-collage n${t.photos.length}`}>
+            {t.photos.map((src, pi) => (
+              <div key={src} className="mp-ph">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src={src} alt={pi === 0 ? `${t.title} workers` : ""} />
+                {pi === 0 && (
+                  <div className="mp-tag">
+                    <span style={{ flex: "none", display: "grid", placeItems: "center", width: 48, height: 48, borderRadius: 14, background: RED, color: "#fff" }}><Ico name={t.icon} size={24} /></span>
+                    <div>
+                      <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: ".18em", color: "#FFC2C7" }}>CATEGORY {num(active)}</div>
+                      <div className="mp-tag-title">{t.title}</div>
+                    </div>
+                  </div>
+                )}
               </div>
-            </div>
+            ))}
           </div>
 
-          {/* description + roles */}
-          <div style={{ padding: "24px 26px 26px", display: "flex", flexDirection: "column", flex: 1 }}>
-            <p style={{ fontSize: 16, color: "#DCE7F4", lineHeight: 1.65, margin: "0 0 22px" }}>{t.desc}</p>
-            <div style={{ fontSize: 12, fontWeight: 700, letterSpacing: ".16em", color: MUT2, marginBottom: 12 }}>TYPICAL ROLES</div>
-            <div style={{ display: "flex", flexWrap: "wrap", gap: 9, marginTop: "auto" }}>
+          <div className="mp-body">
+            <span className="mp-meta"><Ico name="badge" size={14} sw={2} /> {t.level}</span>
+            <p style={{ fontSize: 15.5, color: "#DCE7F4", lineHeight: 1.65, margin: "14px 0 18px" }}>{t.desc}</p>
+            <div style={{ fontSize: 11.5, fontWeight: 700, letterSpacing: ".16em", color: MUT2, marginBottom: 12 }}>TYPICAL ROLES</div>
+            <div className="mp-roles">
               {t.roles.map((r, ri) => (
-                <span key={r} className="mp-chip" style={{ animationDelay: `${ri * 70}ms` }}>{r}</span>
+                <div key={r} className="mp-role" style={{ animationDelay: `${120 + ri * 60}ms` }}>
+                  <span><Ico name="check" size={12} sw={2.8} /></span>{r}
+                </div>
               ))}
             </div>
+            <a href="#contact" className="mp-cta">Request {t.title} workers <span aria-hidden>→</span></a>
           </div>
         </div>
       </div>
@@ -788,13 +926,13 @@ function DemandPostForm() {
   }
 
   return (
-    <form onSubmit={(e) => { e.preventDefault(); setSent(true) }} className="reveal" style={{ background: "#fff", border: `1px solid ${LINE}`, borderRadius: 22, padding: 34, boxShadow: "0 28px 60px -36px rgba(11,36,71,.4)" }}>
+    <form onSubmit={(e) => { e.preventDefault(); setSent(true) }} className="reveal form-card" style={{ background: "#fff", border: `1px solid ${LINE}`, borderRadius: 22, padding: 34, boxShadow: "0 28px 60px -36px rgba(11,36,71,.4)" }}>
       <div style={{ textAlign: "center", marginBottom: 6 }}>
         <div style={{ fontFamily: SORA, fontWeight: 800, fontSize: 25, color: NAVY }}>Post Your Demand Here!</div>
         <div style={{ width: 66, height: 4, background: RED, borderRadius: 2, margin: "10px auto 0" }} />
       </div>
       <p style={{ textAlign: "center", fontSize: 13.5, color: MUT, margin: "10px 0 22px" }}>Employers — send us your manpower requirement and we&rsquo;ll get back within 24 hours.</p>
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
+      <div className="form-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
         <div><label style={lbl}>Name *</label><input required name="name" placeholder="Your / company name" style={inputBase} /></div>
         <div><label style={lbl}>Email *</label><input required name="email" type="email" placeholder="you@email.com" style={inputBase} /></div>
         <div><label style={lbl}>Phone Number *</label><input required name="phone" type="tel" placeholder="+977 ..." style={inputBase} /></div>
@@ -849,9 +987,9 @@ export function FullSite() {
           {/* LEFT */}
           <div>
             <div className="reveal" style={{ display: "inline-flex", alignItems: "center", gap: 14, marginBottom: 22 }}>
-              <span style={{ fontFamily: SORA, fontSize: 14, fontWeight: 700, letterSpacing: ".22em", color: RED }}>YOUR TRUSTED PARTNER IN</span>
-              <span style={{ width: 70, height: 2, background: "linear-gradient(90deg,#E01E2B,rgba(224,30,43,0))" }} />
-              <span style={{ color: RED, fontSize: 16 }}>✈️</span>
+              <span className="hero-eyebrow-text" style={{ fontFamily: SORA, fontSize: 14, fontWeight: 700, letterSpacing: ".22em", color: RED }}>YOUR TRUSTED PARTNER IN</span>
+              <span className="hero-eyebrow-deco" style={{ width: 70, height: 2, background: "linear-gradient(90deg,#E01E2B,rgba(224,30,43,0))" }} />
+              <span className="hero-eyebrow-deco" style={{ color: RED, fontSize: 16 }}>✈️</span>
             </div>
             <h1 className="reveal hero-h1" style={{ fontFamily: SORA, fontWeight: 800, fontSize: 78, lineHeight: ".96", letterSpacing: "-.02em", margin: "0 0 6px", color: NAVY }}>
               GLOBAL<br /><span style={{ color: RED }}>OPPORTUNITIES</span>
@@ -860,7 +998,7 @@ export function FullSite() {
             <p className="reveal" style={{ fontSize: 17.5, lineHeight: 1.6, color: MUT, maxWidth: 490, margin: "0 0 26px" }}>
               Ethical, government-licensed recruitment that opens doors across the Middle East, Europe and beyond — matching the right people with the right opportunities.
             </p>
-            <div className="reveal" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "12px 26px", maxWidth: 490, marginBottom: 34 }}>
+            <div className="reveal hero-checks" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "12px 26px", maxWidth: 490, marginBottom: 34 }}>
               {["Licensed & Govt. Approved", "Ethical Recruitment", "Global Reach, Local Support", "End-to-End Guidance"].map((t) => (
                 <div key={t} style={{ display: "flex", alignItems: "center", gap: 11 }}>
                   <span style={{ flex: "none", width: 24, height: 24, borderRadius: "50%", background: NAVY, color: "#fff", display: "grid", placeItems: "center", fontSize: 13 }}>✓</span>
@@ -872,7 +1010,7 @@ export function FullSite() {
               <a href="#contact" aria-label="Send Your Demand">
                 <InteractiveHoverButton
                   text="Send Your Demand"
-                  className="w-auto px-8 py-4 text-base border-[#0A2E52]/15 bg-white text-[#0A2E52] shadow-[0_16px_34px_-14px_rgba(11,36,71,.4)]"
+                  className="w-auto pl-11 pr-7 py-4 text-base border-[#0A2E52]/15 bg-white text-[#0A2E52] shadow-[0_16px_34px_-14px_rgba(11,36,71,.4)]"
                   style={{ "--primary": RED, "--primary-foreground": "#fff" } as React.CSSProperties}
                 />
               </a>
@@ -918,10 +1056,12 @@ export function FullSite() {
         </div>
       </section>
 
-      {/* ============ WHAT WE SUPPLY — harmonic wave ============ */}
-      <div className="dark">
+      {/* ============ WHAT WE SUPPLY — harmonic wave (desktop) / photo grid (phones & tablets) ============ */}
+      <div className="supply-mobile"><SupplyMobile /></div>
+      <div className="dark supply-desktop">
         <HarmonicWave
           images={supplyPhotos}
+          layout={supplyLayout}
           scrollLength={320}
           title={(<>What We <span style={{ color: "#FF5A63", fontWeight: 400 }}>Supply</span>.</>)}
           sub="Skilled Nepali workers for every trade and every level — screened, trade-tested and ready to deploy across the Gulf, Europe & Asia."
@@ -940,6 +1080,21 @@ export function FullSite() {
           </div>
           {/* destination flags — interactive dock, country name on hover */}
           <div className="reveal" style={{ background: "#fff", border: `1px solid ${LINE}`, borderRadius: 20, padding: "18px 24px 26px", boxShadow: "0 18px 40px -32px rgba(11,36,71,.5)" }}>
+            <div className="show-mobile" style={{ padding: "6px 0 0" }}>
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(2, minmax(0, 1fr))", gap: 10 }}>
+                {destinations.map((c) => (
+                  <div key={c.code} style={{ minWidth: 0, display: "flex", alignItems: "center", gap: 10, padding: "10px 12px", borderRadius: 14, background: BG, border: `1px solid ${LINE}` }}>
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img src={`https://flagcdn.com/w80/${c.code}.png`} srcSet={`https://flagcdn.com/w160/${c.code}.png 2x`} alt="" style={{ flex: "none", width: 34, height: 24, objectFit: "cover", borderRadius: 5, boxShadow: "0 0 0 1px rgba(0,0,0,.08)" }} />
+                    <div style={{ minWidth: 0 }}>
+                      <div style={{ fontFamily: SORA, fontWeight: 700, fontSize: 14, color: NAVY, lineHeight: 1.2 }}>{c.name}</div>
+                      <div style={{ fontSize: 11, color: MUT, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{c.sub}</div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+            <div className="hide-mobile">
             <ToolDock
               label="Countries we serve"
               size={72}
@@ -954,6 +1109,7 @@ export function FullSite() {
               }))}
             />
             <div style={{ textAlign: "center", fontSize: 13, color: MUT, marginTop: 4 }}>Hover a flag to see the country.</div>
+            </div>
           </div>
         </div>
       </section>
@@ -1009,7 +1165,7 @@ export function FullSite() {
               const total = d.positions.reduce((s, p) => s + p.count, 0)
               return (
                 <button key={d.id} type="button" onClick={() => setOpenDemand(d)} className="hov-6" style={{ textAlign: "left", cursor: "pointer", background: "#fff", border: `1px solid ${LINE}`, borderRadius: 20, padding: 26, boxShadow: "0 18px 40px -30px rgba(11,36,71,.4)", transition: "transform .25s ease, box-shadow .25s ease" }}>
-                  <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12, marginBottom: 14 }}>
+                  <div className="demand-head" style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 10, marginBottom: 14 }}>
                     <span style={{ fontSize: 12, fontWeight: 700, color: RED, background: "#FDECEE", padding: "5px 12px", borderRadius: 999 }}>{d.category}</span>
                     <span style={{ display: "inline-flex", alignItems: "center", gap: 8, fontSize: 13, fontWeight: 700, color: NAVY }}><Flag code={d.code} h={18} title={d.country} /> {d.city}, {d.country}</span>
                   </div>
@@ -1067,7 +1223,7 @@ export function FullSite() {
         <div className="contact-grid" style={{ maxWidth: 1280, margin: "0 auto", gap: 50 }}>
           <div className="reveal">
             <div style={eyebrow}>GET IN TOUCH</div>
-            <h2 style={{ ...h2, fontSize: 42, margin: "0 0 18px" }}>Let&rsquo;s start your journey</h2>
+            <h2 style={{ ...h2, fontSize: "clamp(30px, 7.4vw, 42px)", margin: "0 0 18px" }}>Let&rsquo;s start your journey</h2>
             <p style={{ fontSize: 16.5, color: MUT, lineHeight: 1.6, margin: "0 0 30px" }}>Visit our office in Kathmandu or reach out — our team responds within one business day.</p>
             <div style={{ display: "flex", flexDirection: "column", gap: 18 }}>
               {[["📍", "Head Office", "Samakhusi, Tokha-10, Kathmandu, Nepal"], ["📞", "Call Us", "01-4985802"], ["✉️", "Email", "riooverseasnepal@gmail.com"], ["🌐", "Website", "riooverseasnepal.com"]].map(([ic, t, v]) => (

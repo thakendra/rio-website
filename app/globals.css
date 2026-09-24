@@ -211,8 +211,54 @@ html {
   .hero-h1 { font-size: 56px !important; }
 }
 @media (max-width: 640px) {
-  .cols8, .cols5, .cols4, .cols3, .split2 { grid-template-columns: 1fr 1fr; }
+  .cols8, .cols5, .cols4 { grid-template-columns: 1fr 1fr; }
+  .cols3, .split2 { grid-template-columns: 1fr; }
   .filter-grid, .footer-grid { grid-template-columns: 1fr; }
-  .hero-h1 { font-size: 44px !important; }
+  .hero-h1 { font-size: clamp(30px, 9.2vw, 44px) !important; }
   section, header, footer, nav { padding-left: 20px !important; padding-right: 20px !important; }
+  section { padding-top: 64px !important; padding-bottom: 64px !important; }
+
+  /* hero */
+  .hero-eyebrow-deco { display: none !important; }
+  .hero-eyebrow-text { font-size: 12px !important; letter-spacing: .16em !important; }
+  .hero-checks { grid-template-columns: 1fr !important; gap: 10px !important; }
+  .hero-checks span:last-child { font-size: 14.5px !important; }
+
+  /* forms: single column, 16px inputs so iOS doesn't zoom on focus */
+  .form-card { padding: 24px 18px !important; }
+  .form-grid { grid-template-columns: 1fr !important; }
+  .form-grid > * { grid-column: auto !important; }
+  .form-grid input, .form-grid textarea, .form-grid select { font-size: 16px !important; }
+
+  /* reviews: summary stacks, cards become a swipe row */
+  .rv-summary { flex-direction: column; text-align: center; gap: 14px !important; padding: 22px 18px !important; }
+  .rv-divider { display: none; }
+  .rv-cta { margin-left: 0 !important; }
+  .rv-cards { display: flex !important; overflow-x: auto; scroll-snap-type: x mandatory; gap: 14px !important; margin: 0 -20px; padding: 4px 20px 14px; scrollbar-width: none; }
+  .rv-cards::-webkit-scrollbar { display: none; }
+  .rv-cards > * { flex: 0 0 84%; scroll-snap-align: center; }
+
+  /* process: vertical timeline */
+  .proc-line { display: none; }
+  .proc-steps { grid-template-columns: 1fr !important; gap: 0 !important; }
+  .proc-steps::before { content: ""; position: absolute; left: 23px; top: 24px; bottom: 24px; width: 3px; border-radius: 2px; background: #DCE7F4; }
+  .proc-step { display: flex !important; align-items: center; gap: 16px; text-align: left !important; padding: 10px 0 !important; position: relative; }
+  .proc-dot { flex: none; width: 48px !important; height: 48px !important; margin: 0 !important; font-size: 17px !important; position: relative; z-index: 1; }
+  .proc-name { margin-bottom: 2px !important; }
+  .proc-desc { padding: 0 !important; font-size: 13px !important; }
+
+  /* demand cards */
+  .demand-head { flex-wrap: wrap; }
+}
+
+/* layout swaps between phone/tablet and desktop */
+.show-mobile { display: none; }
+@media (max-width: 640px) {
+  .show-mobile { display: block; }
+  .hide-mobile { display: none !important; }
+}
+.supply-mobile { display: none; }
+@media (max-width: 900px), (pointer: coarse) {
+  .supply-desktop { display: none; }
+  .supply-mobile { display: block; }
 }
