@@ -128,16 +128,37 @@ const RESPONSIVE = {
   },
 };
 
-function useResponsive() {
-  const [r, setR] = useState(RESPONSIVE.desktop);
+/** Overrides for the small-screen layout (card size, column snap, rest scale). */
+export interface SmallConfig {
+  scale?: number | null;
+  colX?: number | null;
+  card?: { w: number; h: number } | null;
+}
+
+function useResponsive(smallConfig?: SmallConfig) {
+  const [flags, setFlags] = useState({ small: false, coarse: false });
   useEffect(() => {
-    const mq = window.matchMedia("(pointer: coarse)");
-    const read = () => setR(mq.matches ? RESPONSIVE.small : RESPONSIVE.desktop);
+    const mqSmall = window.matchMedia("(max-width: 900px)");
+    const mqCoarse = window.matchMedia("(pointer: coarse)");
+    const read = () =>
+      setFlags((prev) =>
+        prev.small === mqSmall.matches && prev.coarse === mqCoarse.matches
+          ? prev
+          : { small: mqSmall.matches, coarse: mqCoarse.matches }
+      );
     read();
-    mq.addEventListener("change", read);
-    return () => mq.removeEventListener("change", read);
+    mqSmall.addEventListener("change", read);
+    mqCoarse.addEventListener("change", read);
+    // resize is a safety net: some environments don't emit matchMedia change events
+    window.addEventListener("resize", read);
+    return () => {
+      mqSmall.removeEventListener("change", read);
+      mqCoarse.removeEventListener("change", read);
+      window.removeEventListener("resize", read);
+    };
   }, []);
-  return r;
+  const base = flags.small ? { ...RESPONSIVE.small, ...smallConfig } : RESPONSIVE.desktop;
+  return { ...base, small: flags.small, coarse: flags.coarse };
 }
 
 function usePointerParallax(active: boolean, enabled: boolean) {
@@ -280,7 +301,7 @@ function Card({
       }
     >
       <div
-        className="relative h-full w-full overflow-hidden shadow-2xl shadow-black/20 dark:shadow-black/50 ring-1 ring-black/10 dark:ring-white/10 transition-shadow duration-300 hover:shadow-cyan-500/20 max-md:rounded-[4vw]"
+        className="relative h-full w-full overflow-hidden shadow-2xl shadow-black/20 dark:shadow-black/50 ring-1 ring-black/10 dark:ring-white/10 transition-shadow duration-300 max-md:rounded-[4vw]"
         style={{ borderRadius: `${cardRadius}px` }}
       >
         <div className="absolute inset-0 bg-gradient-to-tr from-black/30 dark:from-black/50 via-transparent to-white/10 opacity-70 pointer-events-none z-10" />
@@ -298,10 +319,10 @@ function Card({
           >
             <div className="absolute inset-x-0 bottom-0 h-3/5 bg-gradient-to-t from-black/80 via-black/25 to-transparent" />
             <div className="absolute left-0 bottom-0 flex flex-col p-[8%]">
-              <span className="font-mono uppercase tracking-[0.25em] text-white/60 text-[0.62vw] max-md:text-[2.4vw]">
+              <span className="font-mono uppercase tracking-[0.25em] text-white/60 text-[0.62vw] max-md:text-[1.9vw]">
                 {String(index + 1).padStart(2, "0")}
               </span>
-              <span className="mt-[3%] font-semibold uppercase leading-none tracking-[0.13em] text-white text-[0.98vw] max-md:text-[3.6vw]">
+              <span className="mt-[3%] font-semibold uppercase leading-none tracking-[0.13em] text-white text-[0.98vw] max-md:text-[2.5vw]">
                 {label}
               </span>
               <span className="mt-[7%] block h-[2px] w-[24%] rounded-full bg-[#FF5A63]" />
@@ -322,6 +343,7 @@ interface StackSpreadStageProps {
   textColor?: string;
   textFadeStart?: number;
   showScrollHint?: boolean;
+  smallConfig?: SmallConfig;
   title?: ReactNode;
   sub?: string;
 }
@@ -335,12 +357,13 @@ function StackSpreadStage({
   textColor,
   textFadeStart = 0.28,
   showScrollHint = true,
+  smallConfig,
   title,
   sub,
 }: StackSpreadStageProps) {
   const wrapRef = useRef<HTMLDivElement>(null);
   const reduce = useReducedMotion();
-  const { scale: scaleMul, small: isSmall, colX, card: fixedCard } = useResponsive();
+  const { scale: scaleMul, small: isSmall, colX, card: fixedCard, coarse } = useResponsive(smallConfig);
 
   const { scrollYProgress } = useScroll({
     target: wrapRef,
@@ -360,7 +383,7 @@ function StackSpreadStage({
     setSpread((was) => (was ? p > 0.985 : p >= 0.999));
   });
 
-  const parallaxEnabled = reduce !== true && !isSmall;
+  const parallaxEnabled = reduce !== true && !isSmall && !coarse;
   const pointer = usePointerParallax(spread, parallaxEnabled);
 
   const noScale = reduce === true;
@@ -377,7 +400,7 @@ function StackSpreadStage({
       <div className="sticky top-0 h-screen w-full overflow-hidden">
         {/* Ambient Dark/Light Mode Glow Background */}
         <div className="absolute inset-0 pointer-events-none flex items-center justify-center opacity-30 dark:opacity-20 blur-[140px]">
-          <div className="w-[45vw] h-[45vw] rounded-full bg-indigo-300 dark:bg-indigo-900 mix-blend-multiply dark:mix-blend-screen" />
+          <div className="w-[45vw] h-[45vw] rounded-full bg-[#1E5A96] mix-blend-screen" />
         </div>
 
         {/* Centre Brand Headline */}
@@ -440,7 +463,7 @@ function StackSpreadStage({
             <span className="opacity-70">Scroll to Harmonize</span>
             <div className="w-[1px] h-6 bg-current opacity-30 relative overflow-hidden">
               <motion.div
-                className="absolute inset-x-0 top-0 bg-indigo-500 dark:bg-indigo-400 h-full"
+                className="absolute inset-x-0 top-0 bg-[#E01E2B] h-full"
                 animate={{ y: ["-100%", "100%"] }}
                 transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
               />
@@ -464,6 +487,8 @@ export interface HarmonicWaveProps {
   images?: StackSpreadItem[];
   /** Optional slot geometry for a different card count; defaults to the built-in eight. */
   layout?: Omit<StackSpreadCard, "item">[];
+  /** Overrides for the small-screen layout (card size, column snap, rest scale). */
+  smallConfig?: SmallConfig;
   title?: ReactNode;
   sub?: string;
 }
@@ -478,6 +503,7 @@ export default function HarmonicWave({
   showScrollHint = true,
   images,
   layout,
+  smallConfig,
   title,
   sub,
 }: HarmonicWaveProps = {}) {
@@ -495,6 +521,7 @@ export default function HarmonicWave({
       textColor={textColor}
       textFadeStart={textFadeStart}
       showScrollHint={showScrollHint}
+      smallConfig={smallConfig}
       title={title}
       sub={sub}
     />

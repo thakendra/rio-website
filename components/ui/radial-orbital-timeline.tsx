@@ -176,13 +176,13 @@ export default function RadialOrbitalTimeline({
             transform: `translate(${centerOffset.x}px, ${centerOffset.y}px)`,
           }}
         >
-          <div className="absolute w-16 h-16 rounded-full bg-gradient-to-br from-[#0A2E52] via-[#1E6FE0] to-[#E01E2B] animate-pulse flex items-center justify-center z-10 shadow-[0_14px_36px_-10px_rgba(11,36,71,0.5)]">
+          <div className="absolute w-16 h-16 rounded-full bg-[#0A2E52] ring-4 ring-[#E01E2B]/15 flex items-center justify-center z-10 shadow-[0_14px_36px_-10px_rgba(11,36,71,0.5)]">
             <div className="absolute w-20 h-20 rounded-full border border-[#0A2E52]/20 animate-ping opacity-70"></div>
             <div
               className="absolute w-24 h-24 rounded-full border border-[#0A2E52]/10 animate-ping opacity-50"
               style={{ animationDelay: "0.5s" }}
             ></div>
-            <div className="w-8 h-8 rounded-full bg-white/80 backdrop-blur-md"></div>
+            <div className="w-3 h-3 rounded-full bg-[#E01E2B]"></div>
           </div>
 
           <div className="absolute rounded-full border border-[#0A2E52]/12" style={{ width: radius * 2 - 16, height: radius * 2 - 16 }}></div>

@@ -6,9 +6,7 @@ import { TextAnimation } from "@/components/ui/text-animation"
 import { MorphingScrollNavbar, type ScrollNavLink } from "@/components/ui/morphing-scroll-navbar"
 import RadialOrbitalTimeline from "@/components/ui/radial-orbital-timeline"
 import HarmonicWave, { type StackSpreadCard } from "@/components/ui/harmonic-wave"
-import { motion } from "motion/react"
 import { ShieldCheck, FileCheck2, BadgeCheck, UserCheck, Zap, HeartPulse, Clock } from "lucide-react"
-import { ToolDock, ToolDockTile } from "@/components/ui/techstack"
 import { InteractiveHoverButton } from "@/components/ui/interactive-hover-button"
 
 /* ---------------- palette ---------------- */
@@ -259,28 +257,29 @@ const supplyPhotos = [
   { src: "/gallery/supply/logistics.jpg", alt: "Driver & logistics", label: "Logistics" },
   { src: "/gallery/supply/security.jpg", alt: "Security personnel", label: "Security" },
   { src: "/gallery/supply/cleaning.jpg", alt: "Cleaning team", label: "Cleaning" },
-  { src: "/gallery/supply/facility-management.jpg", alt: "Facility management technicians", label: "Facility Management" },
+  { src: "/gallery/supply/facility-management.jpg", alt: "Facility management technicians", label: "Facility Mgmt" },
   { src: "/gallery/supply/hotels.jpg", alt: "Hotel front desk", label: "Hotels" },
   { src: "/gallery/supply/restaurant.jpg", alt: "Restaurant chefs", label: "Restaurant" },
   { src: "/gallery/supply/retail.jpg", alt: "Retail staff", label: "Retail" },
 ]
 
-/* slot geometry for the 11 cards: wave start → converged frame around the headline */
+/* slot geometry for the 11 cards: wave start → converged frame around the headline.
+   `targetSm` keeps the same motion on phones, framing the copy with 2 rows above / 2 below. */
 const supplyLayout: Omit<StackSpreadCard, "item">[] = [
   // top row
-  { waveOffset: { x: -40, y: -12 }, waveRotate: -6, target: { x: -26, y: -35, rotate: -4, scale: 0.82, w: 16, h: 22 }, targetSm: { x: -22, y: -44 }, z: 2 },
-  { waveOffset: { x: -32, y: 12 }, waveRotate: -4, target: { x: 0, y: -36, rotate: 2, scale: 0.8, w: 17, h: 22 }, targetSm: { x: 22, y: -44 }, z: 3 },
-  { waveOffset: { x: -24, y: -16 }, waveRotate: -2, target: { x: 26, y: -34, rotate: 4, scale: 0.82, w: 16, h: 22 }, targetSm: { x: -22, y: -30 }, z: 4 },
+  { waveOffset: { x: -40, y: -12 }, waveRotate: -6, target: { x: -26, y: -35, rotate: -4, scale: 0.82, w: 16, h: 22 }, targetSm: { x: -26, y: -36 }, z: 2 },
+  { waveOffset: { x: -32, y: 12 }, waveRotate: -4, target: { x: 0, y: -36, rotate: 2, scale: 0.8, w: 17, h: 22 }, targetSm: { x: 26, y: -36 }, z: 3 },
+  { waveOffset: { x: -24, y: -16 }, waveRotate: -2, target: { x: 26, y: -34, rotate: 4, scale: 0.82, w: 16, h: 22 }, targetSm: { x: -30, y: -21.5 }, z: 4 },
   // side columns
-  { waveOffset: { x: -16, y: 14 }, waveRotate: 0, target: { x: -40, y: -11, rotate: -3, scale: 0.8, w: 14, h: 20 }, targetSm: { x: 22, y: -30 }, z: 5 },
-  { waveOffset: { x: -8, y: -14 }, waveRotate: 3, target: { x: 40, y: -11, rotate: 3, scale: 0.8, w: 14, h: 20 }, targetSm: { x: -22, y: -16 }, z: 6 },
-  { waveOffset: { x: 0, y: 16 }, waveRotate: -3, target: { x: -40, y: 14, rotate: 3, scale: 0.8, w: 14, h: 20 }, targetSm: { x: 22, y: -16 }, z: 7 },
-  { waveOffset: { x: 8, y: -12 }, waveRotate: 2, target: { x: 40, y: 14, rotate: -3, scale: 0.8, w: 14, h: 20 }, targetSm: { x: -22, y: 16 }, z: 8 },
+  { waveOffset: { x: -16, y: 14 }, waveRotate: 0, target: { x: -40, y: -11, rotate: -3, scale: 0.8, w: 14, h: 20 }, targetSm: { x: 0, y: -21.5 }, z: 5 },
+  { waveOffset: { x: -8, y: -14 }, waveRotate: 3, target: { x: 40, y: -11, rotate: 3, scale: 0.8, w: 14, h: 20 }, targetSm: { x: 30, y: -21.5 }, z: 6 },
+  { waveOffset: { x: 0, y: 16 }, waveRotate: -3, target: { x: -40, y: 14, rotate: 3, scale: 0.8, w: 14, h: 20 }, targetSm: { x: -30, y: 21.5 }, z: 7 },
+  { waveOffset: { x: 8, y: -12 }, waveRotate: 2, target: { x: 40, y: 14, rotate: -3, scale: 0.8, w: 14, h: 20 }, targetSm: { x: 0, y: 21.5 }, z: 8 },
   // bottom row
-  { waveOffset: { x: 16, y: 10 }, waveRotate: 4, target: { x: -33, y: 36, rotate: 4, scale: 0.8, w: 15, h: 21 }, targetSm: { x: 22, y: 16 }, z: 9 },
-  { waveOffset: { x: 24, y: -14 }, waveRotate: 5, target: { x: -11, y: 38, rotate: -2, scale: 0.8, w: 16, h: 21 }, targetSm: { x: -22, y: 30 }, z: 10 },
-  { waveOffset: { x: 32, y: 12 }, waveRotate: 6, target: { x: 11, y: 37, rotate: 3, scale: 0.8, w: 16, h: 21 }, targetSm: { x: 22, y: 30 }, z: 11 },
-  { waveOffset: { x: 40, y: -10 }, waveRotate: 7, target: { x: 33, y: 35, rotate: -4, scale: 0.8, w: 15, h: 21 }, targetSm: { x: 0, y: 44 }, z: 12 },
+  { waveOffset: { x: 16, y: 10 }, waveRotate: 4, target: { x: -33, y: 36, rotate: 4, scale: 0.8, w: 15, h: 21 }, targetSm: { x: 30, y: 21.5 }, z: 9 },
+  { waveOffset: { x: 24, y: -14 }, waveRotate: 5, target: { x: -11, y: 38, rotate: -2, scale: 0.8, w: 16, h: 21 }, targetSm: { x: -30, y: 36 }, z: 10 },
+  { waveOffset: { x: 32, y: 12 }, waveRotate: 6, target: { x: 11, y: 37, rotate: 3, scale: 0.8, w: 16, h: 21 }, targetSm: { x: 0, y: 36 }, z: 11 },
+  { waveOffset: { x: 40, y: -10 }, waveRotate: 7, target: { x: 33, y: 35, rotate: -4, scale: 0.8, w: 15, h: 21 }, targetSm: { x: 30, y: 36 }, z: 12 },
 ]
 
 
@@ -465,12 +464,12 @@ export const socialLinks: { name: string; href: string; icon: React.ReactNode }[
 /* GOOGLE REVIEWS */
 export const googleRating = { score: 4.9, count: 128 }
 export const reviews: { name: string; initial: string; color: string; stars: number; date: string; text: string }[] = [
-  { name: "Bishal Gurung", initial: "B", color: "#1E6FE0", stars: 5, date: "2 weeks ago", text: "Rio Overseas handled my Qatar deployment start to finish — honest process, no hidden charges. Highly recommended for anyone going to the Gulf." },
-  { name: "Anjana Thapa", initial: "A", color: "#E01E2B", stars: 5, date: "1 month ago", text: "Very professional and transparent team. They explained every step of the visa and medical process clearly. I felt supported the whole time." },
-  { name: "Deepak Shrestha", initial: "D", color: "#1E8A5B", stars: 5, date: "1 month ago", text: "Got my job in the UAE within a few weeks. Documentation and ticketing were all managed properly. Thank you Rio Overseas." },
-  { name: "Sunita Rai", initial: "S", color: "#8A5CFF", stars: 4, date: "2 months ago", text: "Good support throughout the recruitment. The orientation before departure was genuinely helpful for a first-timer like me." },
-  { name: "Kamal Bhandari", initial: "K", color: "#E08A1E", stars: 5, date: "3 months ago", text: "A trustworthy, government-licensed agency. They kept every promise and my family in Nepal was kept informed. Ethical recruitment done right." },
-  { name: "Manoj Tamang", initial: "M", color: "#0A2E52", stars: 5, date: "3 months ago", text: "Smooth visa process and quick deployment. The team is responsive and answers every question. Would recommend to friends." },
+  { name: "Bishal Gurung", initial: "B", color: "#0A2E52", stars: 5, date: "2 weeks ago", text: "Rio Overseas handled my Qatar deployment start to finish — honest process, no hidden charges. Highly recommended for anyone going to the Gulf." },
+  { name: "Anjana Thapa", initial: "A", color: "#1E4F82", stars: 5, date: "1 month ago", text: "Very professional and transparent team. They explained every step of the visa and medical process clearly. I felt supported the whole time." },
+  { name: "Deepak Shrestha", initial: "D", color: "#12386A", stars: 5, date: "1 month ago", text: "Got my job in the UAE within a few weeks. Documentation and ticketing were all managed properly. Thank you Rio Overseas." },
+  { name: "Sunita Rai", initial: "S", color: "#2A5B8F", stars: 4, date: "2 months ago", text: "Good support throughout the recruitment. The orientation before departure was genuinely helpful for a first-timer like me." },
+  { name: "Kamal Bhandari", initial: "K", color: "#0B2447", stars: 5, date: "3 months ago", text: "A trustworthy, government-licensed agency. They kept every promise and my family in Nepal was kept informed. Ethical recruitment done right." },
+  { name: "Manoj Tamang", initial: "M", color: "#34608F", stars: 5, date: "3 months ago", text: "Smooth visa process and quick deployment. The team is responsive and answers every question. Would recommend to friends." },
 ]
 
 export const footerCols = [
@@ -646,48 +645,6 @@ function SectorCard({ icon, name, desc, red, delay }: { icon: string; name: stri
   )
 }
 
-/* ---------------- What We Supply — phone/tablet layout ---------------- */
-function SupplyMobile() {
-  return (
-    <section style={{ position: "relative", overflow: "hidden", background: "#0a0a0a", padding: "72px 20px" }}>
-      <div style={{ position: "absolute", inset: 0, background: "radial-gradient(70% 38% at 50% 12%, rgba(79,70,229,.2), transparent 70%)", pointerEvents: "none" }} />
-      <div style={{ position: "relative", textAlign: "center", maxWidth: 520, margin: "0 auto 30px" }}>
-        <h2 style={{ fontFamily: SORA, fontWeight: 300, fontSize: "clamp(34px, 10vw, 52px)", lineHeight: 1.05, letterSpacing: "-.03em", color: "#fff", margin: 0 }}>
-          What We <span style={{ color: "#FF5A63", fontWeight: 400 }}>Supply</span>.
-        </h2>
-        <p style={{ fontSize: 15, lineHeight: 1.6, color: "rgba(255,255,255,.62)", margin: "14px 0 0" }}>
-          Skilled Nepali workers for every trade and every level — screened, trade-tested and ready to deploy across the Gulf, Europe &amp; Asia.
-        </p>
-      </div>
-      <div style={{ position: "relative", display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, maxWidth: 620, margin: "0 auto" }}>
-        {supplyPhotos.map((p, i) => {
-          const wide = supplyPhotos.length % 2 === 1 && i === supplyPhotos.length - 1
-          return (
-            <motion.div
-              key={p.src}
-              initial={{ opacity: 0, y: 28, scale: 0.96 }}
-              whileInView={{ opacity: 1, y: 0, scale: 1 }}
-              whileTap={{ scale: 0.97 }}
-              viewport={{ once: true, margin: "-40px" }}
-              transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1], delay: (i % 2) * 0.08 }}
-              style={{ position: "relative", gridColumn: wide ? "1 / -1" : undefined, aspectRatio: wide ? "16 / 9" : "4 / 5", borderRadius: 16, overflow: "hidden", boxShadow: "0 18px 40px -22px rgba(0,0,0,.8), inset 0 0 0 1px rgba(255,255,255,.08)" }}
-            >
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={p.src} alt={p.alt} loading="lazy" style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover" }} />
-              <div style={{ position: "absolute", inset: "auto 0 0 0", height: "62%", background: "linear-gradient(0deg, rgba(0,0,0,.82), rgba(0,0,0,.25) 55%, transparent)" }} />
-              <div style={{ position: "absolute", left: 12, right: 12, bottom: 12, display: "flex", flexDirection: "column" }}>
-                <span style={{ fontFamily: "ui-monospace, monospace", fontSize: 10, letterSpacing: ".25em", color: "rgba(255,255,255,.6)" }}>{String(i + 1).padStart(2, "0")}</span>
-                <span style={{ marginTop: 3, fontFamily: SORA, fontWeight: 700, fontSize: 13, letterSpacing: ".1em", textTransform: "uppercase", color: "#fff", lineHeight: 1.15 }}>{p.label}</span>
-                <span style={{ marginTop: 7, width: 26, height: 2, borderRadius: 2, background: "#FF5A63" }} />
-              </div>
-            </motion.div>
-          )
-        })}
-      </div>
-    </section>
-  )
-}
-
 /* ---------------- interactive process timeline ---------------- */
 function ProcessTimeline() {
   const [active, setActive] = useState(0)
@@ -717,7 +674,7 @@ function ProcessTimeline() {
       <style>{`@keyframes procPulse { 0%,100% { box-shadow: 0 0 0 0 rgba(224,30,43,.5);} 50% { box-shadow: 0 0 0 12px rgba(224,30,43,0);} }`}</style>
       {/* base + progress line */}
       <div className="proc-line" style={{ position: "absolute", top: 32, left: "5%", right: "5%", height: 3, background: "#DCE7F4", borderRadius: 2 }} />
-      <div className="proc-line" style={{ position: "absolute", top: 32, left: "5%", width: `${pct * 0.9}%`, height: 3, background: `linear-gradient(90deg,${RED},#ff6a72)`, borderRadius: 2, transition: "width .6s cubic-bezier(.22,1,.36,1)" }} />
+      <div className="proc-line" style={{ position: "absolute", top: 32, left: "5%", width: `${pct * 0.9}%`, height: 3, background: `linear-gradient(90deg,${NAVY},#1E5A96)`, borderRadius: 2, transition: "width .6s cubic-bezier(.22,1,.36,1)" }} />
       <div className="cols8 proc-steps" style={{ position: "relative", gap: 8 }}>
         {processSteps.map((p, i) => {
           const done = i <= active
@@ -735,14 +692,14 @@ function ProcessTimeline() {
             >
               <div className="proc-dot" style={{
                 width: 64, height: 64, margin: "0 auto 16px", borderRadius: "50%",
-                background: done ? RED : "#fff",
-                border: `2px solid ${RED}`,
-                color: done ? "#fff" : RED,
+                background: isActive ? RED : done ? NAVY : "#fff",
+                border: `2px solid ${isActive ? RED : done ? NAVY : "#C9D7E8"}`,
+                color: done ? "#fff" : "#7A8CA3",
                 display: "grid", placeItems: "center", fontFamily: SORA, fontWeight: 800, fontSize: 20,
                 transform: isActive ? "scale(1.14)" : "scale(1)",
                 transition: "background .35s ease, color .35s ease, transform .35s ease, box-shadow .35s ease",
                 animation: isActive ? "procPulse 1.6s ease-in-out infinite" : "none",
-                boxShadow: done ? "0 14px 30px -16px rgba(224,30,43,.6)" : "0 8px 20px -14px rgba(11,36,71,.3)",
+                boxShadow: isActive ? "0 14px 30px -14px rgba(224,30,43,.6)" : done ? "0 12px 26px -16px rgba(10,46,82,.6)" : "0 8px 20px -14px rgba(11,36,71,.2)",
               }}>{p.num}</div>
               <div>
                 <div className="proc-name" style={{ fontFamily: SORA, fontWeight: 700, fontSize: 15, color: isActive ? RED : NAVY, transition: "color .3s ease", marginBottom: 5 }}>{p.name}</div>
@@ -981,7 +938,6 @@ export function FullSite() {
       {/* ============ HERO ============ */}
       <header id="home" style={{ position: "relative", padding: "150px 40px 90px", background: "radial-gradient(1200px 700px at 78% 18%, #EAF2FD 0%, rgba(234,242,253,0) 60%),linear-gradient(180deg,#FBFDFF 0%,#F2F7FE 100%)", overflow: "hidden" }}>
         <div style={{ position: "absolute", inset: 0, backgroundImage: "linear-gradient(rgba(11,36,71,.045) 1px,transparent 1px),linear-gradient(90deg,rgba(11,36,71,.045) 1px,transparent 1px)", backgroundSize: "56px 56px", maskImage: "linear-gradient(180deg,transparent,black 20%,black 60%,transparent)", WebkitMaskImage: "linear-gradient(180deg,transparent,black 20%,black 60%,transparent)", pointerEvents: "none" }} />
-        <div style={{ position: "absolute", top: 120, left: 0, fontSize: 26, color: "#9DB4D0", animation: "skyPlane 26s linear infinite", pointerEvents: "none" }}>✈️</div>
 
         <div className="hero-grid" style={{ position: "relative", maxWidth: 1280, margin: "0 auto" }}>
           {/* LEFT */}
@@ -989,7 +945,6 @@ export function FullSite() {
             <div className="reveal" style={{ display: "inline-flex", alignItems: "center", gap: 14, marginBottom: 22 }}>
               <span className="hero-eyebrow-text" style={{ fontFamily: SORA, fontSize: 14, fontWeight: 700, letterSpacing: ".22em", color: RED }}>YOUR TRUSTED PARTNER IN</span>
               <span className="hero-eyebrow-deco" style={{ width: 70, height: 2, background: "linear-gradient(90deg,#E01E2B,rgba(224,30,43,0))" }} />
-              <span className="hero-eyebrow-deco" style={{ color: RED, fontSize: 16 }}>✈️</span>
             </div>
             <h1 className="reveal hero-h1" style={{ fontFamily: SORA, fontWeight: 800, fontSize: 78, lineHeight: ".96", letterSpacing: "-.02em", margin: "0 0 6px", color: NAVY }}>
               GLOBAL<br /><span style={{ color: RED }}>OPPORTUNITIES</span>
@@ -1010,9 +965,12 @@ export function FullSite() {
               <a href="#contact" aria-label="Send Your Demand">
                 <InteractiveHoverButton
                   text="Send Your Demand"
-                  className="w-auto pl-11 pr-7 py-4 text-base border-[#0A2E52]/15 bg-white text-[#0A2E52] shadow-[0_16px_34px_-14px_rgba(11,36,71,.4)]"
+                  className="w-auto pl-11 pr-7 py-4 text-base border-transparent bg-[#0A2E52] text-white shadow-[0_18px_36px_-16px_rgba(10,46,82,.7)]"
                   style={{ "--primary": RED, "--primary-foreground": "#fff" } as React.CSSProperties}
                 />
+              </a>
+              <a href="#demands" className="hero-link" style={{ display: "inline-flex", alignItems: "center", gap: 8, fontSize: 15.5, fontWeight: 700, color: NAVY }}>
+                View live demands <span aria-hidden style={{ color: RED }}>→</span>
               </a>
             </div>
           </div>
@@ -1033,10 +991,10 @@ export function FullSite() {
             <div style={{ position: "absolute", top: "44%", right: "0%", display: "flex", alignItems: "center", gap: 8, background: "rgba(255,255,255,.85)", backdropFilter: "blur(10px)", border: `1px solid ${LINE2}`, borderRadius: 12, padding: "8px 13px", boxShadow: "0 14px 30px -14px rgba(11,36,71,.3)", animation: "floaty 7s ease-in-out infinite" }}>
               <Flag code="qa" h={14} /> <span style={{ fontWeight: 700, fontSize: 13, color: NAVY }}>Doha</span>
             </div>
-            <div style={{ position: "absolute", bottom: "8%", left: "4%", display: "flex", alignItems: "center", gap: 15, background: "rgba(10,46,82,.94)", backdropFilter: "blur(10px)", borderRadius: 18, padding: "16px 22px", boxShadow: "0 22px 48px -16px rgba(11,36,71,.65)", border: `2px solid ${RED}`, animation: "floaty2 6.5s ease-in-out infinite" }}>
+            <div style={{ position: "absolute", bottom: "8%", left: "4%", display: "flex", alignItems: "center", gap: 15, background: "rgba(10,46,82,.94)", backdropFilter: "blur(10px)", borderRadius: 18, padding: "16px 22px", boxShadow: "0 22px 48px -16px rgba(11,36,71,.65)", border: "1px solid rgba(157,184,218,.22)", animation: "floaty2 6.5s ease-in-out infinite" }}>
               <span style={{ flex: "none", width: 52, height: 52, borderRadius: 14, background: RED, color: "#fff", display: "grid", placeItems: "center" }}><Ico name="shield" size={28} /></span>
               <div style={{ display: "flex", flexDirection: "column", gap: 3 }}>
-                <span style={{ fontSize: 12, fontWeight: 700, color: "#FF9AA0", letterSpacing: ".08em" }}>GOVT. LICENSED</span>
+                <span style={{ fontSize: 12, fontWeight: 700, color: "#9DB8DA", letterSpacing: ".14em" }}>GOVT. LICENSED</span>
                 <span style={{ fontFamily: SORA, fontWeight: 800, fontSize: 22, color: "#fff", lineHeight: 1 }}>1667 / 080 / 081</span>
                 <span style={{ fontSize: 11.5, fontWeight: 600, color: MUT2, letterSpacing: ".03em" }}>Dept. of Foreign Employment</span>
               </div>
@@ -1048,20 +1006,42 @@ export function FullSite() {
 
       {/* ============ WHY CHOOSE US — radial orbital ============ */}
       <section id="why" style={{ position: "relative", background: "linear-gradient(180deg,#FFFFFF 0%,#EAF2FD 100%)", padding: "84px 40px 40px", overflow: "hidden" }}>
-        <div style={{ textAlign: "center", maxWidth: 640, margin: "0 auto" }}>
-          <h2 style={h2}>Why Choose Us</h2>
+        <div className="reveal" style={{ textAlign: "center", maxWidth: 640, margin: "0 auto" }}>
+          <div style={eyebrow}>OUR PROMISE</div>
+          <h2 style={h2}>Why choose Rio Overseas</h2>
+          <p style={{ fontSize: 16.5, color: MUT, lineHeight: 1.6, margin: "14px auto 0", maxWidth: 520 }}>Seven commitments behind every placement. Select any point to learn more.</p>
         </div>
         <div style={{ height: "min(72vh, 660px)", minHeight: 520 }}>
           <RadialOrbitalTimeline timelineData={whyChoose} />
         </div>
       </section>
 
-      {/* ============ WHAT WE SUPPLY — harmonic wave (desktop) / photo grid (phones & tablets) ============ */}
-      <div className="supply-mobile"><SupplyMobile /></div>
-      <div className="dark supply-desktop">
+      {/* ============ CORE VALUES ============ */}
+      <section style={{ background: "#fff", padding: "72px 40px" }}>
+        <div style={{ maxWidth: 1280, margin: "0 auto" }}>
+          <div className="reveal" style={{ textAlign: "center", maxWidth: 640, margin: "0 auto 40px" }}>
+            <div style={eyebrow}>WHAT DRIVES US</div>
+            <h2 style={h2}>Our core values</h2>
+          </div>
+          <div className="values-grid">
+            {coreValues.map((v, i) => (
+              <div key={v.title} className="reveal value-card" style={{ transitionDelay: `${i * 50}ms` }}>
+                <span className="value-ico"><Ico name={v.icon} size={24} /></span>
+                <div style={{ fontFamily: SORA, fontWeight: 700, fontSize: 16, color: NAVY, marginBottom: 4 }}>{v.title}</div>
+                <div style={{ fontSize: 13.5, color: MUT, lineHeight: 1.45 }}>{v.desc}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ============ WHAT WE SUPPLY — harmonic wave ============ */}
+      <div className="dark">
         <HarmonicWave
           images={supplyPhotos}
           layout={supplyLayout}
+          bgColor="#071A2E"
+          smallConfig={{ colX: null, card: { w: 28, h: 11 }, scale: 1 }}
           scrollLength={320}
           title={(<>What We <span style={{ color: "#FF5A63", fontWeight: 400 }}>Supply</span>.</>)}
           sub="Skilled Nepali workers for every trade and every level — screened, trade-tested and ready to deploy across the Gulf, Europe & Asia."
@@ -1078,38 +1058,18 @@ export function FullSite() {
               <p style={{ fontSize: 16.5, color: MUT, lineHeight: 1.6, margin: "14px 0 0" }}>Connecting Nepalese talent to opportunities across the world.</p>
             </div>
           </div>
-          {/* destination flags — interactive dock, country name on hover */}
-          <div className="reveal" style={{ background: "#fff", border: `1px solid ${LINE}`, borderRadius: 20, padding: "18px 24px 26px", boxShadow: "0 18px 40px -32px rgba(11,36,71,.5)" }}>
-            <div className="show-mobile" style={{ padding: "6px 0 0" }}>
-              <div style={{ display: "grid", gridTemplateColumns: "repeat(2, minmax(0, 1fr))", gap: 10 }}>
-                {destinations.map((c) => (
-                  <div key={c.code} style={{ minWidth: 0, display: "flex", alignItems: "center", gap: 10, padding: "10px 12px", borderRadius: 14, background: BG, border: `1px solid ${LINE}` }}>
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img src={`https://flagcdn.com/w80/${c.code}.png`} srcSet={`https://flagcdn.com/w160/${c.code}.png 2x`} alt="" style={{ flex: "none", width: 34, height: 24, objectFit: "cover", borderRadius: 5, boxShadow: "0 0 0 1px rgba(0,0,0,.08)" }} />
-                    <div style={{ minWidth: 0 }}>
-                      <div style={{ fontFamily: SORA, fontWeight: 700, fontSize: 14, color: NAVY, lineHeight: 1.2 }}>{c.name}</div>
-                      <div style={{ fontSize: 11, color: MUT, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{c.sub}</div>
-                    </div>
-                  </div>
-                ))}
+          {/* destination tiles */}
+          <div className="country-grid">
+            {destinations.map((c, i) => (
+              <div key={c.code} className="reveal country-tile" style={{ transitionDelay: `${i * 40}ms` }}>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src={`https://flagcdn.com/w80/${c.code}.png`} srcSet={`https://flagcdn.com/w160/${c.code}.png 2x`} alt="" className="country-flag" />
+                <div style={{ minWidth: 0 }}>
+                  <div className="country-name">{c.name}</div>
+                  <div className="country-sub">{c.sub}</div>
+                </div>
               </div>
-            </div>
-            <div className="hide-mobile">
-            <ToolDock
-              label="Countries we serve"
-              size={72}
-              items={destinations.map((c) => ({
-                label: c.name,
-                icon: (
-                  <ToolDockTile className="bg-white">
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img src={`https://flagcdn.com/w160/${c.code}.png`} alt="" draggable={false} className="size-full object-cover" />
-                  </ToolDockTile>
-                ),
-              }))}
-            />
-            <div style={{ textAlign: "center", fontSize: 13, color: MUT, marginTop: 4 }}>Hover a flag to see the country.</div>
-            </div>
+            ))}
           </div>
         </div>
       </section>
@@ -1166,7 +1126,7 @@ export function FullSite() {
               return (
                 <button key={d.id} type="button" onClick={() => setOpenDemand(d)} className="hov-6" style={{ textAlign: "left", cursor: "pointer", background: "#fff", border: `1px solid ${LINE}`, borderRadius: 20, padding: 26, boxShadow: "0 18px 40px -30px rgba(11,36,71,.4)", transition: "transform .25s ease, box-shadow .25s ease" }}>
                   <div className="demand-head" style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 10, marginBottom: 14 }}>
-                    <span style={{ fontSize: 12, fontWeight: 700, color: RED, background: "#FDECEE", padding: "5px 12px", borderRadius: 999 }}>{d.category}</span>
+                    <span style={{ fontSize: 11.5, fontWeight: 700, letterSpacing: ".06em", textTransform: "uppercase", color: NAVY, background: "#EAF1FA", padding: "5px 11px", borderRadius: 6 }}>{d.category}</span>
                     <span style={{ display: "inline-flex", alignItems: "center", gap: 8, fontSize: 13, fontWeight: 700, color: NAVY }}><Flag code={d.code} h={18} title={d.country} /> {d.city}, {d.country}</span>
                   </div>
                   <div style={{ fontFamily: SORA, fontWeight: 800, fontSize: 21, color: NAVY, marginBottom: 6 }}>{d.company}</div>
@@ -1178,7 +1138,7 @@ export function FullSite() {
                   <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12, paddingTop: 16, borderTop: "1px solid #EEF3F9" }}>
                     <div style={{ fontSize: 13, color: MUT, fontWeight: 600 }}>
                       <span style={{ fontFamily: SORA, fontWeight: 800, fontSize: 18, color: NAVY }}>{total}</span> vacancies · {d.gender}
-                      <span style={{ display: "block", fontSize: 12.5, color: RED, fontWeight: 700, marginTop: 2 }}>Interview: {d.interview}</span>
+                      <span style={{ display: "block", fontSize: 12.5, color: INK, fontWeight: 600, marginTop: 3 }}><span style={{ color: MUT }}>Interview:</span> {d.interview}</span>
                     </div>
                     <span style={{ display: "inline-flex", alignItems: "center", gap: 6, color: RED, fontWeight: 700, fontSize: 14 }}>View details <span>→</span></span>
                   </div>
@@ -1226,9 +1186,9 @@ export function FullSite() {
             <h2 style={{ ...h2, fontSize: "clamp(30px, 7.4vw, 42px)", margin: "0 0 18px" }}>Let&rsquo;s start your journey</h2>
             <p style={{ fontSize: 16.5, color: MUT, lineHeight: 1.6, margin: "0 0 30px" }}>Visit our office in Kathmandu or reach out — our team responds within one business day.</p>
             <div style={{ display: "flex", flexDirection: "column", gap: 18 }}>
-              {[["📍", "Head Office", "Samakhusi, Tokha-10, Kathmandu, Nepal"], ["📞", "Call Us", "01-4985802"], ["✉️", "Email", "riooverseasnepal@gmail.com"], ["🌐", "Website", "riooverseasnepal.com"]].map(([ic, t, v]) => (
+              {([["pin", "Head Office", "Samakhusi, Tokha-10, Kathmandu, Nepal"], ["phone", "Call Us", "01-4985802"], ["mail", "Email", "riooverseasnepal@gmail.com"], ["globe", "Website", "riooverseasnepal.com"]] as [IcoName, string, string][]).map(([ic, t, v]) => (
                 <div key={t} style={{ display: "flex", alignItems: "center", gap: 14 }}>
-                  <span style={{ width: 44, height: 44, borderRadius: 12, background: "#fff", border: `1px solid ${LINE}`, display: "grid", placeItems: "center", fontSize: 19 }}>{ic}</span>
+                  <span style={{ flex: "none", width: 44, height: 44, borderRadius: 12, background: NAVY, color: "#fff", display: "grid", placeItems: "center" }}><Ico name={ic} size={20} /></span>
                   <div><div style={{ fontWeight: 700, color: NAVY, fontSize: 15 }}>{t}</div><div style={{ fontSize: 14, color: MUT }}>{v}</div></div>
                 </div>
               ))}
@@ -1243,24 +1203,6 @@ export function FullSite() {
             />
           </div>
           <DemandPostForm />
-        </div>
-      </section>
-
-      {/* ============ CORE VALUES ============ */}
-      <section style={{ background: "#fff", padding: "64px 40px" }}>
-        <div style={{ maxWidth: 1280, margin: "0 auto" }}>
-          <div className="reveal" style={{ textAlign: "center", marginBottom: 34 }}>
-            <div style={eyebrow}>WHAT DRIVES US</div>
-          </div>
-          <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "center", gap: 20 }}>
-            {coreValues.map((v, i) => (
-              <div key={v.title} className="reveal" style={{ transitionDelay: `${i * 50}ms`, flex: "1 1 150px", maxWidth: 200, textAlign: "center" }}>
-                <span style={{ display: "grid", placeItems: "center", width: 54, height: 54, margin: "0 auto 12px", borderRadius: 15, background: "#EAF2FD", color: RED }}><Ico name={v.icon} size={26} /></span>
-                <div style={{ fontFamily: SORA, fontWeight: 700, fontSize: 16.5, color: NAVY, marginBottom: 4 }}>{v.title}</div>
-                <div style={{ fontSize: 13.5, color: MUT, lineHeight: 1.45 }}>{v.desc}</div>
-              </div>
-            ))}
-          </div>
         </div>
       </section>
 
