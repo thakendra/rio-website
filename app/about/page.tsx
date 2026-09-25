@@ -112,7 +112,7 @@ export default function AboutPage() {
               <p style={{ fontSize: 17, color: MUT, lineHeight: 1.7, margin: "18px 0 0", maxWidth: 460 }}>The direction that shapes every decision we make — for the workers we deploy and the employers we serve.</p>
             </div>
             <div style={{ position: "relative", borderRadius: 22, overflow: "hidden", border: `1px solid ${LINE2}`, boxShadow: "0 34px 70px -40px rgba(11,36,71,.6)" }}>
-              <Photo src="/gallery/office-front.jpg" alt="Rio Overseas office and team in Kathmandu" style={{ width: "100%", height: 300 }} />
+              <Photo src="/gallery/office-front.jpg" alt="Rio Overseas office and team in Kathmandu" style={{ width: "100%", height: 300, objectPosition: "top" }} />
             </div>
           </div>
           <div className="split2" style={{ gap: 24 }}>

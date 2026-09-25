@@ -270,7 +270,7 @@ export default function RadialOrbitalTimeline({
                       <img
                         src={item.image}
                         alt={item.title}
-                        className="block w-full h-20 object-cover"
+                        className="block w-full h-20 object-cover object-top"
                       />
                     )}
                     <CardHeader className="pb-2">
