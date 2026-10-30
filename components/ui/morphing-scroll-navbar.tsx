@@ -49,6 +49,7 @@ export function MorphingScrollNavbar({
   const [direction, setDirection] = useState<"up" | "down">("up")
   const [progress, setProgress] = useState(0)
   const [activeHref, setActiveHref] = useState(links[0]?.href ?? "")
+  const [menuOpen, setMenuOpen] = useState(false)
 
   useEffect(() => {
     let lastY = window.scrollY
@@ -89,6 +90,18 @@ export function MorphingScrollNavbar({
     }
   }, [links])
 
+  useEffect(() => {
+    if (!menuOpen) return
+    const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") setMenuOpen(false) }
+    const onResize = () => { if (window.innerWidth > 900) setMenuOpen(false) }
+    document.addEventListener("keydown", onKey)
+    window.addEventListener("resize", onResize)
+    return () => {
+      document.removeEventListener("keydown", onKey)
+      window.removeEventListener("resize", onResize)
+    }
+  }, [menuOpen])
+
   const floating = !atTop
   const compact = floating && direction === "down"
 
@@ -114,7 +127,26 @@ export function MorphingScrollNavbar({
                 <a className="msn-button msn-icon-button" href={socialUrl} target="_blank" rel="noreferrer" aria-label="Open X in a new tab"><XIcon/></a>
               </>
             )}
+            <button
+              type="button"
+              className="msn-button msn-icon-button msn-menu-toggle"
+              aria-label={menuOpen ? "Close menu" : "Open menu"}
+              aria-expanded={menuOpen}
+              aria-controls="msn-mobile-menu"
+              onClick={() => setMenuOpen((open) => !open)}
+            >
+              <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+                {menuOpen ? <path d="M6 6l12 12M18 6L6 18" /> : <path d="M4 7h16M4 12h16M4 17h16" />}
+              </svg>
+            </button>
           </div>
+          {menuOpen && (
+            <div id="msn-mobile-menu" className="msn-mobile-menu">
+              {links.map((link) => (
+                <a href={link.href} key={link.href} onClick={() => setMenuOpen(false)}>{link.label}</a>
+              ))}
+            </div>
+          )}
         </div>
       </nav>
     </>
@@ -130,7 +162,10 @@ const STYLES = `
 .msn-nav.is-compact .msn-shell{max-width:560px;height:52px}.msn-brand{flex:none;display:inline-flex;align-items:center;font-size:25px;font-weight:800;line-height:1;letter-spacing:-.045em;transition:font-size .38s cubic-bezier(.34,1.2,.5,1),transform .18s ease}.msn-brand span{color:var(--accent)}.msn-brand:hover{transform:translateY(-1px)}.msn-nav.is-compact .msn-brand{font-size:22px}
 .msn-links{display:flex;gap:28px;max-width:640px;overflow:hidden;opacity:1;transition:max-width .45s cubic-bezier(.34,1.2,.5,1),opacity .28s ease,transform .3s ease,gap .35s ease}.msn-nav.is-compact .msn-links{max-width:0;gap:0;opacity:0;transform:translateY(-8px);pointer-events:none}.msn-links a{position:relative;color:var(--muted);font-size:14px;font-weight:480;white-space:nowrap;transition:color .15s ease}.msn-links a:after{content:"";position:absolute;right:0;bottom:-5px;left:0;height:2px;border-radius:2px;background:var(--accent);transform:scaleX(0);transform-origin:0 50%;transition:transform .28s cubic-bezier(.2,.7,.2,1)}.msn-links a:hover,.msn-links a[aria-current="location"]{color:var(--ink)}.msn-links a:hover:after,.msn-links a[aria-current="location"]:after{transform:scaleX(1)}
 .msn-actions{display:flex;flex:none;align-items:center;gap:10px}.msn-button{display:inline-flex;align-items:center;justify-content:center;gap:8px;height:42px;padding:0 18px;border:1px solid var(--line);border-radius:9px;background:var(--surface);color:var(--ink);font-size:13.5px;font-weight:620;white-space:nowrap;transition:height .38s ease,font-size .38s ease,padding .38s ease,background-color .18s ease,transform .18s ease,box-shadow .22s ease}.msn-button svg{width:17px;height:17px}.msn-button:hover{background:color-mix(in srgb,var(--surface) 80%,var(--paper));transform:translateY(-2px);box-shadow:0 10px 22px -17px color-mix(in srgb,var(--ink) 45%,transparent)}.msn-button:active{transform:translateY(0) scale(.97)}.msn-icon-button{width:42px;padding:0}.msn-nav.is-compact .msn-button{height:36px;padding:0 14px;font-size:12.5px}.msn-nav.is-compact .msn-icon-button{width:36px;padding:0}
-@media(max-width:900px){.msn-links{display:none}.msn-nav.is-floating .msn-shell{max-width:680px}.msn-nav.is-compact .msn-shell{max-width:520px}}
+.msn-menu-toggle{display:none;padding:0;background:transparent;cursor:pointer;color:inherit}.msn-menu-toggle svg{width:20px;height:20px}
+.msn-shell{position:relative}.msn-mobile-menu{position:absolute;top:calc(100% + 8px);right:0;left:0;display:flex;flex-direction:column;padding:8px;border:1px solid var(--line);border-radius:16px;background:var(--surface);box-shadow:0 24px 50px -24px rgba(11,36,71,.5)}.msn-mobile-menu a{padding:13px 14px;border-radius:10px;font-size:15.5px;font-weight:700;color:var(--ink)}.msn-mobile-menu a:hover{background:var(--paper)}
+@media(min-width:901px){.msn-mobile-menu{display:none}}
+@media(max-width:900px){.msn-menu-toggle{display:inline-flex}.msn-links{display:none}.msn-nav.is-floating .msn-shell{max-width:680px}.msn-nav.is-compact .msn-shell{max-width:520px}}
 @media(max-width:560px){.msn-nav{padding:0 12px}.msn-shell,.msn-nav.is-floating .msn-shell,.msn-nav.is-compact .msn-shell{gap:12px;height:60px;padding:0 4px 0 10px}.msn-nav.is-floating .msn-shell,.msn-nav.is-compact .msn-shell{height:52px}.msn-brand,.msn-nav.is-compact .msn-brand{font-size:23px}.msn-actions{gap:7px}.msn-button,.msn-nav.is-compact .msn-button{height:40px;padding:0 13px;font-size:13px}.msn-nav.is-floating .msn-button,.msn-nav.is-compact .msn-button{height:36px}.msn-icon-button,.msn-nav.is-compact .msn-icon-button{width:40px;padding:0}.msn-nav.is-floating .msn-icon-button,.msn-nav.is-compact .msn-icon-button{width:36px;padding:0}.msn-github span{display:none}.msn-github{width:40px;padding:0}.msn-nav.is-floating .msn-github,.msn-nav.is-compact .msn-github{width:36px;padding:0}}
 @media(prefers-reduced-motion:reduce){.msn-nav *,.msn-shell,.msn-progress{transition-duration:.01ms!important}}
 `

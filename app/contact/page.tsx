@@ -12,6 +12,7 @@ const contactNavLinks: ScrollNavLink[] = [
   { label: "Home", href: "/#home" },
   { label: "About", href: "/about" },
   { label: "Demands", href: "/#demands" },
+  { label: "Notices", href: "/notices" },
   { label: "Blog", href: "/blog" },
   { label: "Contact", href: "/contact" },
 ]
